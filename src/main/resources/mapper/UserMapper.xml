@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.project.sinchon.mapper.user">
+	<!-- 회원가입 : 사용자 정보 Insert -->
+	<insert id="registerUser" parameterType="com.project.sinchon.config.security.User">
+		INSERT INTO user(user_ID, email, pwd)
+		VALUES (#{user_ID}, #{email}, #{pwd});
+		
+	</insert>
+	
+	<!-- 로그인 : 사용자가 입력한 정보와 비교할 정보 Select해서 반환 -->
+	<select id="findByUserId" resultType="com.project.sinchon.config.security.User">
+		SELECT user_ID, pwd, roles
+		FROM user
+		WHERE user_ID = #{user_ID}
+	</select>
+	
+</mapper>

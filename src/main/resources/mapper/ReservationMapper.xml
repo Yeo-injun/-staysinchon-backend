@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.project.sinchon.mapper.reservation">
+	<!-- 예약정보 테이블에 사용자가 입력한 예약정보 저장 -->	
+	<insert id="insertInfo" parameterType="com.project.sinchon.dto.ApplyReservationDTO">
+		<!-- res_ID로 PK값 생성후 해당값을 INSERT구문에 넣어줌. -->
+		<selectKey resultType="int" keyProperty="res_ID" order="BEFORE">
+        	SELECT IFNULL(max(res_ID),0)+1 as res_ID
+			FROM reservation_info
+    	</selectKey>
+
+		INSERT INTO reservation_info(
+			res_ID, 
+			check_in, 
+			check_out, 
+			stay_purpose, 
+			num_of_guests, 
+			payment,
+			message,
+			user_ID, 
+			room_ID)
+		VALUES (
+			#{res_ID},
+			#{check_in}, 
+			#{check_out}, 
+			#{stay_purpose}, 
+			#{num_of_guests}, 
+			#{payment},
+			#{message}, 
+			#{user_ID}, 
+			#{room_ID})
+
+	</insert>
+	
+	<!-- insertInfo를 통해 생성된 res_ID로 Procedure 호출 : 예약된 방 테이블, 예약상태 테이블 레코드 생성 -->
+	<insert id="insertRoomAndState" parameterType="HashMap">
+		{ CALL insert_room_and_state (
+			#{res_ID},
+			#{user_ID})
+		}
+	</insert>
+	
+	<!-- 게스트의 예약 현황 및 상태 정보 가져오기 -->
+	<select id="getMypageList" resultType="com.project.sinchon.dto.ReservationInfoDTO">
+		SELECT Info.res_ID, Info.res_date, Info.check_in, Info.check_out, Info.stay_purpose, Info.num_of_guests, Info.message, Info.payment, Info.room_ID, State.state
+		FROM reservation_info Info INNER JOIN reservation_state State ON Info.res_ID = State.res_ID
+		WHERE Info.user_ID = #{user_ID}; 
+	</select>
+	
+	<!-- 수정할 예약 정보 가져오기 -->
+	<select id="getReservationForUpdate" parameterType="int" resultType="com.project.sinchon.dto.ReservationInfoDTO">
+		SELECT stay_purpose, num_of_guests, message
+		FROM reservation_info
+		WHERE res_ID = #{res_ID}; 
+	</select>
+	
+	<!-- 입력받은 데이터로 예약정보 수정하기 -->
+	<update id="updateReservation" parameterType="com.project.sinchon.dto.ReservationInfoDTO">
+		UPDATE reservation_info
+		SET 
+			stay_purpose = #{stay_purpose}, 
+			num_of_guests = #{num_of_guests},
+			message = #{message}
+		WHERE res_ID = #{res_ID};
+	</update>
+	
+	<!-- 예약취소 테이블에 취소된 예약 입력하기 -->
+	<insert id="insertCancelReservation" parameterType="com.project.sinchon.dto.ReservationInfoDTO">
+		INSERT INTO reservation_cancel(res_ID, content)
+		VALUES (#{res_ID}, #{content});
+	</insert>
+	
+	<!-- 취소된 예약의 예약상태 변경 -->
+	<update id="updateStateToCancel" parameterType="com.project.sinchon.dto.ReservationInfoDTO">
+		UPDATE reservation_state
+		SET	state = 3
+		WHERE res_ID = #{res_ID};
+	</update>
+</mapper>
