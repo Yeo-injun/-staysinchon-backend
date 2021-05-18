@@ -132,6 +132,12 @@
 			<version>2.3.0-b170201.1204</version>
 		</dependency>
 		
+		<!-- JWT 라이브러리 의존성 주입 -->
+		<dependency>
+			<groupId>com.auth0</groupId>
+			<artifactId>java-jwt</artifactId>
+			<version>3.4.1</version>
+		</dependency>
     </dependencies>
 
     <build>

@@ -64,6 +64,7 @@ public class GuestController {
      */
     @GetMapping(value = "/rooms", produces = {MediaType.APPLICATION_JSON_VALUE})
     public List<RoomDTO> roomList() throws Exception{
+    	
         return roomService.getList();
     }
     

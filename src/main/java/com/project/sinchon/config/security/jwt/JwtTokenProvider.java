@@ -1,4 +1,4 @@
-package com.project.sinchon.config.security;
+package com.project.sinchon.config.security.jwt;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
@@ -18,16 +18,16 @@ import java.util.Date;
 import java.util.List;
 
 /*
- * </pre> 토큰를 생성하고 검증하는 컴포넌트
+ * JWT를 생성하고 검증하는 컴포넌트
  */
 @RequiredArgsConstructor
 @Component
 public class JwtTokenProvider {
 
-    private String secretKey = "staysinchon";
+    private String secretKey = JwtProperties.SECRET;
 
     // 토큰 유효시간 30분
-    private long tokenValidTime = 30 * 60 * 1000L;
+    private long tokenValidTime = JwtProperties.EXPIRATION_TIME;
     
     private final UserDetailsService userDetailsService;
 
@@ -38,9 +38,10 @@ public class JwtTokenProvider {
     }
 
     // JWT 토큰 생성
-    public String createToken(String user_ID, List<String> roles) {
+    public String createToken(String user_ID, String roles) {
     	// JWT payload 에 저장되는 정보단위
     	Claims claims = Jwts.claims().setSubject(user_ID); 
+    	
     	// JWT claims 객체에 roles 역할 부여
     	claims.put("roles", roles); 
         Date now = new Date();
