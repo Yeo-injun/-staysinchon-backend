@@ -3,6 +3,7 @@ package com.project.sinchon.controller;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.project.sinchon.config.security.PrincipalDetails;
 import com.project.sinchon.dto.ApplyReservationDTO;
 import com.project.sinchon.dto.ReservationCancelDTO;
 import com.project.sinchon.dto.ReservationInfoDTO;
@@ -15,6 +16,7 @@ import com.project.sinchon.service.RoomService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -72,7 +74,12 @@ public class GuestController {
      * @description [예약페이지] 예약가능한 방 기본값 조회(기본값 : 현재일 기준 1박 2일 예약가능한 방)
      */
     @GetMapping(value = "/rooms/available", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public List<RoomDTO> roomAbleList() throws Exception{
+    public List<RoomDTO> roomAbleList(Authentication auth) throws Exception{
+    	// TEST
+    	PrincipalDetails principal = (PrincipalDetails) auth.getPrincipal();
+    	System.out.println("작동되는것인가?!__________" + principal.getUser().toString());
+    	// TEST
+    	
         return roomService.getAbleList();
     }
     
