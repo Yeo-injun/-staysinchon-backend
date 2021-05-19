@@ -57,7 +57,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .addFilter(new JwtAuthorizationFilter(authenticationManager(), userDAO))				// 인증 및 권한이 필요한 url에 접근히 동작하는 필터 
                 
                 .authorizeRequests() 											// 요청에 대한 사용권한 체크
-	                .antMatchers("/admin/**").hasRole("ROLE_ADMIN") 			// 'ROLE_' prefix가 반드시 있어야 함
+	                .antMatchers("/admin/**").hasRole("ADMIN") 			// 'ROLE_' prefix가 반드시 있어야 함
 	                .antMatchers("/rooms/**").access("hasRole('ROLE_USER')")
 	                .anyRequest().permitAll(); // 그외 나머지 요청은 누구나 접근 가능
     }

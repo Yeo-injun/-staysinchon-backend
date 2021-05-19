@@ -26,6 +26,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.security.Principal;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -75,11 +76,6 @@ public class GuestController {
      */
     @GetMapping(value = "/rooms/available", produces = {MediaType.APPLICATION_JSON_VALUE})
     public List<RoomDTO> roomAbleList(Authentication auth) throws Exception{
-    	// TEST
-    	PrincipalDetails principal = (PrincipalDetails) auth.getPrincipal();
-    	System.out.println("작동되는것인가?!__________" + principal.getUser().toString());
-    	// TEST
-    	
         return roomService.getAbleList();
     }
     
@@ -144,15 +140,19 @@ public class GuestController {
     /**
      * @throws Exception 
      * @description [마이페이지] 본인 예약 이력 및 현황 확인하기
-     * 2021.04.21 ver. user_ID를 url로 받아오기 (로그인 구현후 수정 예정)     
+     * 2021.04.21 ver. user_ID를 url로 받아오기 (로그인 구현후 수정 예정)
+     * 2021.05.19 Controller Method 매개변수로 Principal를 할당해서 .getName() 함수로 user_ID값 가져오기  
      */
     @GetMapping(value = "/reservations", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public List<ReservationInfoDTO> getReservations(@RequestParam("user_id") String userID) throws Exception {
+    public List<ReservationInfoDTO> getReservations(Principal principal) throws Exception {
+    	String user_ID = principal.getName(); // 로그인한 사용자의 Token에 있는 정보로 user_ID접근
+    	System.out.println(user_ID);
+    	
     	// user_ID는 url 쿼리스트링으로 받아와서
     	// map자료구조에 user_ID값을 담고
     	// map을 인자로 넣어줘 Service 레이어 호출
     	HashMap<String, String> map = new HashMap<String, String>();
-    	map.put("user_ID", userID);
+    	map.put("user_ID", user_ID);
     	List<ReservationInfoDTO> mypageList = reservationService.getMypageList(map);
     	System.out.println(mypageList.size());
     	return mypageList;
