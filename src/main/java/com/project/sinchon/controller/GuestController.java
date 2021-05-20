@@ -163,8 +163,7 @@ public class GuestController {
     /**
      * @description [마이페이지] 예약수정하기 (수정할 예약정보 가져오기) 
      * <추가 수정 요구사항> 21.04.22 인준 : 권한관리 (비회원에 대한 접근을 막고, 로그인한 user_ID 정보를 사용해야 함.) / 반환되는 JSON객체의 null값 제거하기!
-     * 
-     *      
+     * 21.05.21 인준 : Service 레이어에서 받아온 Data를 user_ID로 검증해서 사용자 본인 예약정보만 호출할 수 있도록 작업 / JsonObject를 새로 생성해서 return(Front에서 필요한 데이터만 .addProperty() 함수로 넘겨줌)      
      */
     @GetMapping(value = "/reservation/{res_ID}", produces = {MediaType.APPLICATION_JSON_VALUE})
     public JsonObject getReservationForUpdate(@PathVariable("res_ID") int res_ID, Principal principal) throws Exception {
@@ -176,11 +175,13 @@ public class GuestController {
     	map.put("user_ID", user_ID);
     	map.put("res_ID", res_ID);
     	
+    	// Service 레이어에서 Data 반환
     	ReservationInfoDTO result = reservationService.getReservationForUpdate(map);
     	JsonObject jsonObj = new JsonObject();
-    	
-		// DAO로 호출한 reservation_info 데이터의 user_ID 검증 : 유효하지 않을 경우 데이터 반환X
-		if (result.getUser_ID() != user_ID) {
+
+		// Service 레이어에서 받은 reservation_info 데이터의 user_ID 검증 : 유효하지 않을 경우 데이터 반환X
+    	// String 자료형의 값의 일치 여부를 검증하기 위해 .equals() 함수를 이용 
+		if (!result.getUser_ID().equals(user_ID)) {
 			jsonObj.addProperty("error", "예약한 사용자가 아닙니다.");
 			return jsonObj;
 		}
@@ -189,7 +190,6 @@ public class GuestController {
 		jsonObj.addProperty("stay_purpose", result.getStay_purpose());
 		jsonObj.addProperty("num_of_guests", result.getNum_of_guests());
 		jsonObj.addProperty("message", result.getMessage());
-		
 		return jsonObj;
     }
     
