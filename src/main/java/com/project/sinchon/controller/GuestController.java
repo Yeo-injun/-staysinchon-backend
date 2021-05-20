@@ -127,13 +127,16 @@ public class GuestController {
      * @description [예약페이지] 예약신청하기 
      * 프론트엔드와 통신시 RequestBody의 데이터 형태 확인
      * <추가 수정 요구사항>
-     * 21.04.22 인준 : 비회원에 대한 접근을 막고, 로그인한 user_ID 정보를 사용해야 함.
+     * 21.04.22 인준 : 비회원에 대한 접근을 막고, 로그인한 user_ID 정보를 사용해야 함. 
+     * 21.05.20 인준 : Security 구현으로 회원일 경우에만 접근가능하고, Principal객체를 매개변수로 받아서 요청 Header에 있는 토큰으로 user_ID 추출
      */
     @PostMapping(value = "/reservation", produces = {MediaType.APPLICATION_JSON_VALUE}, consumes = {MediaType.APPLICATION_JSON_VALUE})
-    public void applyReservation(@RequestBody ApplyReservationDTO applyReservationDTO) throws Exception {
-    	// 사용자 입력 데이터가 JSON형태로 들어와서
-    	// @RequestBody를 거쳐서 VO객체의 변수들과 매핑됨
-    	// 매핑된 VO객체를 Service레이어의 인자값으로 넘겨줌
+    public void applyReservation(@RequestBody ApplyReservationDTO applyReservationDTO, Principal principal) throws Exception {
+    	// 사용자 입력 데이터가 JSON형태로 들어와서 @RequestBody를 거쳐서 VO객체의 변수들과 매핑됨
+    	// user_ID는 Principal을 매개변수로 받아서 .getName() 함수로 user_ID값 받아옴
+    	String user_ID = principal.getName();
+    	applyReservationDTO.setUser_ID(user_ID);
+    	
     	applyReservationService.insertReservation(applyReservationDTO);
     }
 
@@ -145,10 +148,9 @@ public class GuestController {
      */
     @GetMapping(value = "/reservations", produces = {MediaType.APPLICATION_JSON_VALUE})
     public List<ReservationInfoDTO> getReservations(Principal principal) throws Exception {
-    	String user_ID = principal.getName(); // 로그인한 사용자의 Token에 있는 정보로 user_ID접근
-    	System.out.println(user_ID);
+    	// 로그인한 사용자의 Token에 있는 정보로 user_ID접근
+    	String user_ID = principal.getName(); 
     	
-    	// user_ID는 url 쿼리스트링으로 받아와서
     	// map자료구조에 user_ID값을 담고
     	// map을 인자로 넣어줘 Service 레이어 호출
     	HashMap<String, String> map = new HashMap<String, String>();
@@ -160,13 +162,35 @@ public class GuestController {
     
     /**
      * @description [마이페이지] 예약수정하기 (수정할 예약정보 가져오기) 
-     * <추가 수정 요구사항>
-     * 21.04.22 인준 : 권한관리 (비회원에 대한 접근을 막고, 로그인한 user_ID 정보를 사용해야 함.) / 반환되는 JSON객체의 null값 제거하기!
+     * <추가 수정 요구사항> 21.04.22 인준 : 권한관리 (비회원에 대한 접근을 막고, 로그인한 user_ID 정보를 사용해야 함.) / 반환되는 JSON객체의 null값 제거하기!
+     * 
+     *      
      */
     @GetMapping(value = "/reservation/{res_ID}", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ReservationInfoDTO getReservationForUpdate(@PathVariable("res_ID") int res_ID) throws Exception {
-    	// 수정예정사항 : 권한관리 필요.. 반환되는 JSON객체 NULL값 제거...
-    	return reservationService.getReservationForUpdate(res_ID);
+    public JsonObject getReservationForUpdate(@PathVariable("res_ID") int res_ID, Principal principal) throws Exception {
+    	// 요청Header에서 Auth객체 받아와서 user_ID값 가져오기
+    	String user_ID = principal.getName();
+    	
+    	// Service 레이어로 넘길 Map객체 생성
+    	Map map = new HashMap<String, String>();
+    	map.put("user_ID", user_ID);
+    	map.put("res_ID", res_ID);
+    	
+    	ReservationInfoDTO result = reservationService.getReservationForUpdate(map);
+    	JsonObject jsonObj = new JsonObject();
+    	
+		// DAO로 호출한 reservation_info 데이터의 user_ID 검증 : 유효하지 않을 경우 데이터 반환X
+		if (result.getUser_ID() != user_ID) {
+			jsonObj.addProperty("error", "예약한 사용자가 아닙니다.");
+			return jsonObj;
+		}
+		
+		// 수정하고자 하는 값 json객체에 다시 담아주기
+		jsonObj.addProperty("stay_purpose", result.getStay_purpose());
+		jsonObj.addProperty("num_of_guests", result.getNum_of_guests());
+		jsonObj.addProperty("message", result.getMessage());
+		
+		return jsonObj;
     }
     
     /**

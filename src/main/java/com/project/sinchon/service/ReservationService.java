@@ -2,6 +2,7 @@ package com.project.sinchon.service;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.project.sinchon.dto.ReservationCancelDTO;
 import com.project.sinchon.dto.ReservationInfoDTO;
@@ -29,7 +30,7 @@ public interface ReservationService {
      * @return ReservationInfoVO
 	 * @description 수정할 예약정보 가져오기 
      */
-	ReservationInfoDTO getReservationForUpdate(int res_ID) throws Exception;
+	ReservationInfoDTO getReservationForUpdate(Map map) throws Exception;
 
 	 /**
      * @param

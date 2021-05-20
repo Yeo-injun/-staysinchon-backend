@@ -77,7 +77,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 			// STEP3. AuthenticationManager를 호출해서 PrincipalDetailsService.loadUserByUsername() 함수 실행
 			Authentication auth = authenticationManager.authenticate(authToken);
 			System.out.println(auth.toString());
-			System.out.println("Authentication 객체 -------------------");
+
 			// Result. Authentication 객체가 session 영역에 저장 ->> 로그인 정상 처리됨 
 			return auth;
 		} catch (Exception e) {
@@ -100,7 +100,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 		String jwtToken = JWT.create()
 				.withSubject(principalDetailis.getUsername()) // 토큰 이름 설정
 				.withExpiresAt(new Date(System.currentTimeMillis()+JwtProperties.EXPIRATION_TIME)) // 토큰 만료 시간 설정
-				.withClaim("user_ID", principalDetailis.getUser().getUser_ID())
+				.withClaim("user_ID", principalDetailis.getUser().getUser_ID()) // 사용자 ID값 Authentication객체에 담아주기
 				.sign(Algorithm.HMAC512(JwtProperties.SECRET));
 		
 		response.addHeader(JwtProperties.HEADER_STRING, JwtProperties.TOKEN_PREFIX+jwtToken);

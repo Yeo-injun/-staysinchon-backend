@@ -2,6 +2,7 @@ package com.project.sinchon.dao;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,8 +45,8 @@ public class ReservationDAO {
 	}
 
 	// 수정할 예약 정보 가져오기
-	public ReservationInfoDTO getReservationForUpdate(int res_ID) {
-		return sqlSession.selectOne(namespace + ".getReservationForUpdate", res_ID);
+	public ReservationInfoDTO getReservationForUpdate(Map map) {
+		return sqlSession.selectOne(namespace + ".getReservationForUpdate", map);
 	}
 
 	// 입력한 예약정보 수정하기

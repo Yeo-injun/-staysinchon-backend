@@ -49,8 +49,8 @@
 	</select>
 	
 	<!-- 수정할 예약 정보 가져오기 -->
-	<select id="getReservationForUpdate" parameterType="int" resultType="com.project.sinchon.dto.ReservationInfoDTO">
-		SELECT stay_purpose, num_of_guests, message
+	<select id="getReservationForUpdate" parameterType="Map" resultType="com.project.sinchon.dto.ReservationInfoDTO">
+		SELECT user_ID, stay_purpose, num_of_guests, message
 		FROM reservation_info
 		WHERE res_ID = #{res_ID}; 
 	</select>

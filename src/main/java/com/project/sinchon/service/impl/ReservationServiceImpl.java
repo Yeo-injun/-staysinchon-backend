@@ -2,6 +2,7 @@ package com.project.sinchon.service.impl;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -31,8 +32,8 @@ public class ReservationServiceImpl implements ReservationService {
 	}
 	
 	@Override
-	public ReservationInfoDTO getReservationForUpdate(int res_ID) throws Exception {
-		return reservationDAO.getReservationForUpdate(res_ID);
+	public ReservationInfoDTO getReservationForUpdate(Map map) throws Exception {
+		return reservationDAO.getReservationForUpdate(map);
 	}
 
 	@Override
