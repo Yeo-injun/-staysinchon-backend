@@ -25,7 +25,7 @@ public class ReservationServiceImpl implements ReservationService {
 	
 	@Autowired
 	private ReservationDAO reservationDAO;
-
+	
 	@Override
 	public List<ReservationInfoDTO> getMypageList(HashMap<String, String> map) throws Exception {
 		return reservationDAO.getMypageList(map);

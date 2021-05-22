@@ -16,4 +16,21 @@
 		WHERE user_ID = #{user_ID}
 	</select>
 	
+	<update id="updateUserDetails" parameterType="com.project.sinchon.dto.ApplyReservationDTO">
+		UPDATE user
+		SET	firstname = #{firstname},
+			lastname = #{lastname},
+			sex = #{sex},
+			country = #{country},
+			age_group = #{age_group},
+			NA_foods = #{NA_foods},
+			update_date = NOW()
+		WHERE user_ID = #{user_ID}
+	</update>
+	
+	<select id="getUserDetails" resultType="com.project.sinchon.dto.UserDTO">
+		SELECT firstname, lastname, sex, country, age_group, NA_foods, reg_date, update_date
+		FROM user
+		WHERE user_ID = #{user_ID}
+	</select>
 </mapper>

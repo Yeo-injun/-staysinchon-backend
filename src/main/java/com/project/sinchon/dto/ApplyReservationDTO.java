@@ -5,7 +5,7 @@ import lombok.Data;
 import java.util.Date;
 
 /**
- * title : 게스트가 예약신청한 데이터를 받는 VO
+ * title : 게스트가 예약신청한 데이터를 받는 DTO
  * author : 여인준
  * date : 2021.04.14
  *

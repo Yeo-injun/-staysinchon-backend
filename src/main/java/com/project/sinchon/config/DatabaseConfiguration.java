@@ -12,6 +12,9 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.jdbc.datasource.DataSourceTransactionManager;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import javax.sql.DataSource;
 
@@ -21,22 +24,21 @@ import javax.sql.DataSource;
  * title : 데이터베이스 설정구간(커넥션 풀)
  * author : 정효인
  * date : 2021.03.24
- *
+ * update 
+ * 		21.05.22 인준 : 트랜잭션 설정 추가
  * */
 
 @Slf4j
 @Configuration
 @PropertySource("classpath:/application.properties")
+@EnableTransactionManagement
 public class DatabaseConfiguration {
 
 
     @Autowired
     ApplicationContext applicationContext;
 
-
-
-//    hikari 라는 여석은 Connection pool을 말한다
-
+//    hikari는 Connection pool을 말한다
 //    사용자의 요청에 따라 Connection 을 생성하다 보면 많은 수의 연결이 발생했을 때 서버에 과부하가 걸리게 된다 .
 //    이러한 상황을 방지하기 위해 미리 일정수의 Connection 을 만들어 pool 에 담아 뒀다가
 //    사용자의 요청이 발생하면 연결을 해주고 연결종료 시 pool 에 다시 반 환하여 보관하는 것이다 .
@@ -68,4 +70,12 @@ public class DatabaseConfiguration {
     public SqlSessionTemplate sqlSessionTemplate(SqlSessionFactory sqlSessionFactory){
         return new SqlSessionTemplate(sqlSessionFactory);
     }
+    
+    // 트랜잭션 처리를 위한 설정 Bean등록
+    // Config Class위에 @EnableTransactionManagement 작성여부 확인 : 스프링에서 제공하는 어노테이션 기반 트랜잭션을 활성화
+    // 이후 트랜잭션 처리를 원하는 곳에 @Transactional 어노테이션 추가
+	@Bean
+	public PlatformTransactionManager transactionManager() throws Exception {
+		return new DataSourceTransactionManager(dataSource());
+	}
 }

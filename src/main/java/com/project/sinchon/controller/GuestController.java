@@ -4,15 +4,18 @@ import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.project.sinchon.config.security.PrincipalDetails;
+import com.project.sinchon.dao.UserDAO;
 import com.project.sinchon.dto.ApplyReservationDTO;
 import com.project.sinchon.dto.ReservationCancelDTO;
 import com.project.sinchon.dto.ReservationInfoDTO;
 import com.project.sinchon.dto.ReviewDTO;
 import com.project.sinchon.dto.RoomDTO;
 import com.project.sinchon.dto.SNSInfoDTO;
+import com.project.sinchon.dto.UserDTO;
 import com.project.sinchon.service.ApplyReservaionService;
 import com.project.sinchon.service.ReservationService;
 import com.project.sinchon.service.RoomService;
+import com.project.sinchon.service.UserService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -62,12 +65,14 @@ public class GuestController {
     @Autowired
     private ReservationService reservationService;
     
+    @Autowired
+    private UserService userService;
+    
     /**
      * @description [예약페이지] 모든 방 조회
      */
     @GetMapping(value = "/rooms", produces = {MediaType.APPLICATION_JSON_VALUE})
     public List<RoomDTO> roomList() throws Exception{
-    	
         return roomService.getList();
     }
     
@@ -103,16 +108,26 @@ public class GuestController {
 
     /**
      * @description [예약페이지] 예약신청 폼(form) 화면으로 이동 
-     *  <21.04.17 수정사항>
-     * 1. 예약하기 페이지에서 선택한 check_in, check_out 값 POST로 넘겨주기
-     *  <수정 예정사항>
-     * 2. 예약정보가 있다면 회원정보 데이터를 같이 보내주기 (User Table에 회원정보 입력여부 컬럼 추가)
+     *  <수정 예정사항> 예약정보가 있다면 회원정보 데이터를 같이 보내주기 (User Table에 회원정보 입력여부 컬럼 추가)
      */
     @PostMapping(value = "/reservation/form", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public JsonObject reservationForm(@RequestBody Map<String, Object> dateInOut ) throws Exception{
-    	// POST방식으로 받은 JSON 데이터 Map으로 받기 
-    	// Map으로 받은 데이터 JSON형태로 변환 : Gson모듈내 JSON클래스 활용
+    public JsonObject reservationForm(@RequestBody Map<String, Object> dateInOut, Principal principal) throws Exception{
+    	// Gson모듈내 JsonObject클래스로 객체 선언 : Map으로 받은 데이터 JSON형태로 변환하기 위함
     	JsonObject jsonObj = new JsonObject();
+    	
+    	// 인증된 사용자의 reg_date와 update_date가 다른지 확인 : 다르면 사용자 정보를 입력한 것으로 해당 정보를 가져오기
+    	Map<String, String> map = new HashMap<String, String>();
+    	String user_ID = principal.getName();
+    	
+    	map.put("user_ID", user_ID);
+    	UserDTO userDTO = userService.getUserDetails(map);
+    	System.out.println(userDTO.toString());
+    	
+		// reg_date - update_date 비교
+		if (!userDTO.getReg_date().equals(userDTO.getUpdate_date())) {
+			// 사용자 인적사항 JsonObj에 넣어주기
+			System.out.println("_____________ 정상 작동!!");
+		}
     	
     	// Map으로 받은 check_in값 과 check_out값 JSON으로 다시 넘겨주기
     	jsonObj.addProperty("check_in", (String) dateInOut.get("check_in"));
@@ -129,6 +144,7 @@ public class GuestController {
      * <추가 수정 요구사항>
      * 21.04.22 인준 : 비회원에 대한 접근을 막고, 로그인한 user_ID 정보를 사용해야 함. 
      * 21.05.20 인준 : Security 구현으로 회원일 경우에만 접근가능하고, Principal객체를 매개변수로 받아서 요청 Header에 있는 토큰으로 user_ID 추출
+     * 21.05.22 인준 : 예약 신청시 사용자의 인적사항도 함께 저장 및 트랜잭션 처리 구현 완료
      */
     @PostMapping(value = "/reservation", produces = {MediaType.APPLICATION_JSON_VALUE}, consumes = {MediaType.APPLICATION_JSON_VALUE})
     public void applyReservation(@RequestBody ApplyReservationDTO applyReservationDTO, Principal principal) throws Exception {
@@ -143,8 +159,8 @@ public class GuestController {
     /**
      * @throws Exception 
      * @description [마이페이지] 본인 예약 이력 및 현황 확인하기
-     * 2021.04.21 ver. user_ID를 url로 받아오기 (로그인 구현후 수정 예정)
-     * 2021.05.19 Controller Method 매개변수로 Principal를 할당해서 .getName() 함수로 user_ID값 가져오기  
+     * 2021.04.21 user_ID를 url로 받아와서 해당 사용자의 예약 이력정보를 조회 (로그인 구현후 수정 예정)
+     * 2021.05.19 로그인 기능 구현 - Controller Method 매개변수로 Principal를 할당해서 .getName() 함수로 user_ID값 가져오기  
      */
     @GetMapping(value = "/reservations", produces = {MediaType.APPLICATION_JSON_VALUE})
     public List<ReservationInfoDTO> getReservations(Principal principal) throws Exception {

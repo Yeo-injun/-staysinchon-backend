@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 
 import com.project.sinchon.config.security.auth.User;
 import com.project.sinchon.dto.ApplyReservationDTO;
+import com.project.sinchon.dto.UserDTO;
 
 
 /*
@@ -39,6 +40,11 @@ public class UserDAO {
 	// 예약신청시 입력하는 사용자 정보 저장
 	public void updateUserDetails(ApplyReservationDTO applyReservationDTO) {
 		sqlSession.update(namespace + ".updateUserDetails", applyReservationDTO);
+	}
+	
+	// 사용자 인적사항 가져오기
+	public UserDTO getUserDetails(Map<String, String> map) {
+		return sqlSession.selectOne(namespace + ".getUserDetails", map);
 	}
 
 }

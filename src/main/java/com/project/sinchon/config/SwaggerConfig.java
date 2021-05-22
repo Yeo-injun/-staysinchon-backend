@@ -12,7 +12,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 /*
  *
- * title : 스웨커
+ * title : 스웨거
  * author : 정효인
  * date : 2021.03.13
  *
