@@ -40,7 +40,7 @@
 	</insert>
 	
 	<!-- 게스트의 예약 현황 및 상태 정보 가져오기 -->
-	<select id="getMypageList" resultType="com.project.sinchon.dto.ReservationInfoDTO">
+	<select id="getMyReservationList" resultType="com.project.sinchon.dto.ReservationInfoDTO">
 		SELECT Info.res_ID, Info.res_date, Info.check_in, Info.check_out, Info.stay_purpose, Info.num_of_guests, Info.message, Info.payment, Info.room_ID, State.state
 		FROM reservation_info Info INNER JOIN reservation_state State ON Info.res_ID = State.res_ID
 		WHERE Info.user_ID = #{user_ID}; 
@@ -51,6 +51,13 @@
 		SELECT user_ID, stay_purpose, num_of_guests, message
 		FROM reservation_info
 		WHERE res_ID = #{res_ID}; 
+	</select>
+	
+	<!-- 예약ID로 reservationInfo에 있는 사용자ID 가져오기 -->
+	<select id="getReservationUserID" resultType="Map">
+		SELECT user_ID
+		FROM reservation_info
+		WHERE res_ID = #{res_ID}
 	</select>
 	
 	<!-- 입력받은 데이터로 예약정보 수정하기 -->
@@ -75,4 +82,6 @@
 		SET	state = 3
 		WHERE res_ID = #{res_ID};
 	</update>
+	
+
 </mapper>

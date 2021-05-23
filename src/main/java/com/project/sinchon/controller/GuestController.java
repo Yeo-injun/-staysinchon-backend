@@ -1,5 +1,6 @@
 package com.project.sinchon.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -108,33 +109,34 @@ public class GuestController {
 
     /**
      * @description [예약페이지] 예약신청 폼(form) 화면으로 이동 
-     *  <수정 예정사항> 예약정보가 있다면 회원정보 데이터를 같이 보내주기 (User Table에 회원정보 입력여부 컬럼 추가)
+     *  21.05.23 인준 : 사용자의 인적사항이 있다면 인적사항 데이터 같이 보내주기 구현(reg_date와 update_date가 다르면 인적사항이 있다는 것) 
      */
     @PostMapping(value = "/reservation/form", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public JsonObject reservationForm(@RequestBody Map<String, Object> dateInOut, Principal principal) throws Exception{
+    public JsonObject reservationForm(@RequestBody Map<String, Object> reqData, Principal principal) throws Exception{
     	// Gson모듈내 JsonObject클래스로 객체 선언 : Map으로 받은 데이터 JSON형태로 변환하기 위함
     	JsonObject jsonObj = new JsonObject();
     	
-    	// 인증된 사용자의 reg_date와 update_date가 다른지 확인 : 다르면 사용자 정보를 입력한 것으로 해당 정보를 가져오기
+    	// 인증된 사용자의 user데이터 가져오기  
     	Map<String, String> map = new HashMap<String, String>();
     	String user_ID = principal.getName();
-    	
     	map.put("user_ID", user_ID);
     	UserDTO userDTO = userService.getUserDetails(map);
-    	System.out.println(userDTO.toString());
     	
-		// reg_date - update_date 비교
+		// reg_date와 update_date가 다른지 확인 : reg_date - update_date 값이 다르면 사용자 인적사항 return해주기
 		if (!userDTO.getReg_date().equals(userDTO.getUpdate_date())) {
 			// 사용자 인적사항 JsonObj에 넣어주기
-			System.out.println("_____________ 정상 작동!!");
+			jsonObj.addProperty("firstname", userDTO.getFirstname());
+			jsonObj.addProperty("lastname", userDTO.getLastname());
+			jsonObj.addProperty("sex", userDTO.getSex());
+			jsonObj.addProperty("country", userDTO.getCountry());
+			jsonObj.addProperty("age_group", userDTO.getNA_foods());
 		}
     	
-    	// Map으로 받은 check_in값 과 check_out값 JSON으로 다시 넘겨주기
-    	jsonObj.addProperty("check_in", (String) dateInOut.get("check_in"));
-    	jsonObj.addProperty("check_out", (String) dateInOut.get("check_out"));
+    	// check_in값 과 check_out값 room_ID값 JSON으로 다시 넘겨주기
+    	jsonObj.addProperty("check_in", (String) reqData.get("check_in"));
+    	jsonObj.addProperty("check_out", (String) reqData.get("check_out"));
+    	jsonObj.addProperty("room_ID", (String) reqData.get("room_ID"));
     	
-    	// 회원 아이디로 회원저
-        // JSON객체를 String으로 반환 
     	return jsonObj;
     }
 
@@ -157,13 +159,12 @@ public class GuestController {
     }
 
     /**
-     * @throws Exception 
      * @description [마이페이지] 본인 예약 이력 및 현황 확인하기
      * 2021.04.21 user_ID를 url로 받아와서 해당 사용자의 예약 이력정보를 조회 (로그인 구현후 수정 예정)
      * 2021.05.19 로그인 기능 구현 - Controller Method 매개변수로 Principal를 할당해서 .getName() 함수로 user_ID값 가져오기  
      */
     @GetMapping(value = "/reservations", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public List<ReservationInfoDTO> getReservations(Principal principal) throws Exception {
+    public List<ReservationInfoDTO> getMyReservations(Principal principal) throws Exception {
     	// 로그인한 사용자의 Token에 있는 정보로 user_ID접근
     	String user_ID = principal.getName(); 
     	
@@ -171,15 +172,16 @@ public class GuestController {
     	// map을 인자로 넣어줘 Service 레이어 호출
     	HashMap<String, String> map = new HashMap<String, String>();
     	map.put("user_ID", user_ID);
-    	List<ReservationInfoDTO> mypageList = reservationService.getMypageList(map);
-    	System.out.println(mypageList.size());
-    	return mypageList;
+    	List<ReservationInfoDTO> myReservationList = reservationService.getMyReservationList(map);
+    	System.out.println(myReservationList.size());
+    	
+    	return myReservationList;
     }
     
     /**
      * @description [마이페이지] 예약수정하기 (수정할 예약정보 가져오기) 
      * <추가 수정 요구사항> 21.04.22 인준 : 권한관리 (비회원에 대한 접근을 막고, 로그인한 user_ID 정보를 사용해야 함.) / 반환되는 JSON객체의 null값 제거하기!
-     * 21.05.21 인준 : Service 레이어에서 받아온 Data를 user_ID로 검증해서 사용자 본인 예약정보만 호출할 수 있도록 작업 / JsonObject를 새로 생성해서 return(Front에서 필요한 데이터만 .addProperty() 함수로 넘겨줌)      
+     * 21.05.21 인준 : Service 레이어에서 받아온 Data를 user_ID로 검증해서 사용자 본인 예약정보만 호출할 수 있도록 작업 / JsonObject를 새로 생성해서 return(Front에서 필요한 데이터만 .addProperty() 함수로 넘겨줌) 
      */
     @GetMapping(value = "/reservation/{res_ID}", produces = {MediaType.APPLICATION_JSON_VALUE})
     public JsonObject getReservationForUpdate(@PathVariable("res_ID") int res_ID, Principal principal) throws Exception {
@@ -202,7 +204,8 @@ public class GuestController {
 			return jsonObj;
 		}
 		
-		// 수정하고자 하는 값 json객체에 다시 담아주기
+		// res_ID값과 수정하고자 하는 값 json객체에 다시 담아주기
+		jsonObj.addProperty("res_ID", res_ID);
 		jsonObj.addProperty("stay_purpose", result.getStay_purpose());
 		jsonObj.addProperty("num_of_guests", result.getNum_of_guests());
 		jsonObj.addProperty("message", result.getMessage());
@@ -211,18 +214,22 @@ public class GuestController {
     
     /**
      * @description [마이페이지] 예약수정하기 (사용자가 입력한 예약정보로 수정하기) 
-     * <추가 수정 요구사항>
-     * 21.04.22 인준 : 권한관리 (비회원에 대한 접근을 막고, 로그인한 user_ID 정보를 사용해야 함.) / 수정데이터를 받을 객체 수정(수정항목만 받을 객체로 생성)
+     * 21.05.23 인준 : 예약ID로 사용자ID조회해서 예약정보 수정요청을 보낸 사용자ID와 비교. 두 사용자ID가 동일하면 예약정보 Update 
      */
     @PutMapping(value = "/reservation", produces = {MediaType.APPLICATION_JSON_VALUE}, consumes = {MediaType.APPLICATION_JSON_VALUE})
-    public String updateReservation(@RequestBody ReservationInfoDTO reservataionInfoVO) throws Exception {
-    	int isSuccess = reservationService.updateReservation(reservataionInfoVO);
+    public String updateReservation(@RequestBody ReservationInfoDTO reservationInfoDTO, Principal principal) throws Exception {
+    	// reservationInfoDTO 객체를 map형태로 변환하기 위한 ObjectMapper객체 선언
+    	ObjectMapper objectMapper = new ObjectMapper();
+    	Map map = objectMapper.convertValue(reservationInfoDTO, Map.class);
     	
-    	if (isSuccess == 1) {return "수정완료입니다!";} 
-    	else {return "수정이 안됐습니다.. ㅠ 재시도해주세요";}
+    	// 사용자ID를 map객체에 추가로 삽입
+    	String user_ID = principal.getName();
+    	map.put("user_ID", user_ID);
+    	
+    	return reservationService.updateReservation(map);
     }
     
-    /**
+    /** principal 추가 요망!!!###########################____________________________
      * @description [마이페이지] 예약취소하기  
      * <추가 수정 요구사항>
      * 21.04.22 인준 : 권한관리 (비회원에 대한 접근을 막고, 로그인한 user_ID 정보를 사용해야 함.) / 수정데이터를 받을 객체 수정(수정항목만 받을 객체로 생성) / DAO호출 2개하는 것을 프로시저로 작성!

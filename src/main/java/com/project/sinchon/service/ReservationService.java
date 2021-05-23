@@ -23,7 +23,7 @@ public interface ReservationService {
      * @return List<ReservationInfoVO
 	 * @description 사용자가 예약한 예약현황 및 상태 정보 가져오기 
      */
-	List<ReservationInfoDTO> getMypageList(HashMap<String, String> map) throws Exception;
+	List<ReservationInfoDTO> getMyReservationList(HashMap<String, String> map) throws Exception;
 
 	 /**
      * @param 
@@ -35,9 +35,10 @@ public interface ReservationService {
 	 /**
      * @param
 	 * @return int
-	 * @description 입력받은 예약정보로 수정오기 
+	 * @throws Exception 
+	 * @description 예약한 사용자인지 확인하고, 입력받은 예약정보로 수정하기
      */
-	int updateReservation(ReservationInfoDTO reservationInfoDTO);
+	String updateReservation(Map map) throws Exception;
 
 	 /**
      * @param

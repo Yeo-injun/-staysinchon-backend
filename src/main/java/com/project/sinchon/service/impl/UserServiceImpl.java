@@ -23,6 +23,9 @@ public class UserServiceImpl implements UserService {
 	@Autowired
 	private UserDAO userDAO;
 	
+	 /**
+     * @description 사용자 인적사항 가져오기
+     */
 	@Override
 	public UserDTO getUserDetails(Map<String, String> map) throws Exception {		
 		return userDAO.getUserDetails(map);

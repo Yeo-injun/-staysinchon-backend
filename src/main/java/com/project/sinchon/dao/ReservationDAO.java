@@ -40,8 +40,8 @@ public class ReservationDAO {
 	}
 
 	// 게스트의 예약 현황 및 상태 정보 가져오기
-	public List<ReservationInfoDTO> getMypageList(HashMap<String, String> map) {
-		return sqlSession.selectList(namespace + ".getMypageList", map);
+	public List<ReservationInfoDTO> getMyReservationList(HashMap<String, String> map) {
+		return sqlSession.selectList(namespace + ".getMyReservationList", map);
 	}
 
 	// 수정할 예약 정보 가져오기
@@ -50,8 +50,8 @@ public class ReservationDAO {
 	}
 
 	// 입력한 예약정보 수정하기
-	public int updateReservation(ReservationInfoDTO reservationInfoDTO) {
-		return sqlSession.update(namespace + ".updateReservation", reservationInfoDTO);
+	public int updateReservation(Map map) {
+		return sqlSession.update(namespace + ".updateReservation", map);
 	}
 	
 	// 예약취소 테이블에 취소된 예약ID 삽입하기
@@ -62,6 +62,12 @@ public class ReservationDAO {
 	// 취소된 예약의 예약상태 변경
 	public int updateStateToCancel(ReservationCancelDTO reservationCancelDTO) {
 		return sqlSession.update(namespace + ".updateStateToCancel", reservationCancelDTO);
+		
+	}
+	
+	// 예약ID로 예약한 사용자ID 가져오기
+	public Map getReservationUserID(Integer res_ID) {
+		return sqlSession.selectOne(namespace + ".getReservationUserID", res_ID);
 		
 	}
 
