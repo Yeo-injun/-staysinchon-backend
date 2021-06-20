@@ -1,26 +1,15 @@
 package com.project.sinchon.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.gson.Gson;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
-import com.project.sinchon.config.security.PrincipalDetails;
-import com.project.sinchon.dao.UserDAO;
-import com.project.sinchon.dto.ApplyReservationDTO;
-import com.project.sinchon.dto.ReservationCancelDTO;
-import com.project.sinchon.dto.ReservationInfoDTO;
-import com.project.sinchon.dto.ReviewDTO;
-import com.project.sinchon.dto.RoomDTO;
-import com.project.sinchon.dto.SNSInfoDTO;
-import com.project.sinchon.dto.UserDTO;
-import com.project.sinchon.service.ApplyReservaionService;
-import com.project.sinchon.service.ReservationService;
-import com.project.sinchon.service.RoomService;
-import com.project.sinchon.service.UserService;
+import java.security.Principal;
+import java.sql.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -30,12 +19,17 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.security.Principal;
-import java.sql.Date;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.JsonObject;
+import com.project.sinchon.dto.ApplyReservationDTO;
+import com.project.sinchon.dto.ReservationCancelDTO;
+import com.project.sinchon.dto.ReservationInfoDTO;
+import com.project.sinchon.dto.RoomDTO;
+import com.project.sinchon.dto.UserDTO;
+import com.project.sinchon.service.ApplyReservaionService;
+import com.project.sinchon.service.ReservationService;
+import com.project.sinchon.service.RoomService;
+import com.project.sinchon.service.UserService;
 
 
 /*
@@ -53,6 +47,7 @@ import java.util.Map;
  * 
  * */
 
+@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequestMapping(value = "/*")
 public class GuestController {
@@ -74,6 +69,7 @@ public class GuestController {
      */
     @GetMapping(value = "/rooms", produces = {MediaType.APPLICATION_JSON_VALUE})
     public List<RoomDTO> roomList() throws Exception{
+    	System.out.println("URL 요청됨");
         return roomService.getList();
     }
     

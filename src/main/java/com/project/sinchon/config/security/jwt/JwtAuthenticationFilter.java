@@ -1,16 +1,19 @@
 package com.project.sinchon.config.security.jwt;
 
-import lombok.RequiredArgsConstructor;
+import java.io.IOException;
+import java.util.Date;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import javax.servlet.FilterChain;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.bind.annotation.CrossOrigin;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
@@ -18,15 +21,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.project.sinchon.config.security.PrincipalDetails;
 import com.project.sinchon.config.security.auth.User;
 
-import javax.servlet.FilterChain;
-import javax.servlet.ServletException;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import java.io.IOException;
-import java.util.Date;
+import lombok.RequiredArgsConstructor;
 
 /* 참고 영상 : https://www.youtube.com/watch?v=E5brrYYjrwI&list=PL93mKxaRDidERCyMaobSLkvSPzYtIk0Ah&index=24
 
@@ -47,6 +42,7 @@ import java.util.Date;
  * 공식문서 URL> https://docs.spring.io/spring-security/site/docs/5.4.6/reference/html5/#servlet-authentication-unpwd)
  */ 
 @RequiredArgsConstructor
+//@CrossOrigin(origins = "http://localhost:3000")
 public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilter{
 
 	/* SecurityConfig에서 JwtAuthenticationFilter를 등록할 때 AuthenticationManager를 인자로 넘겨주어야 함.
