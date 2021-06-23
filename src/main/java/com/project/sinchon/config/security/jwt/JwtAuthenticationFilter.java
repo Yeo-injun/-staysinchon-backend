@@ -13,7 +13,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.web.bind.annotation.CrossOrigin;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
@@ -42,7 +41,6 @@ import lombok.RequiredArgsConstructor;
  * 공식문서 URL> https://docs.spring.io/spring-security/site/docs/5.4.6/reference/html5/#servlet-authentication-unpwd)
  */ 
 @RequiredArgsConstructor
-//@CrossOrigin(origins = "http://localhost:3000")
 public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilter{
 
 	/* SecurityConfig에서 JwtAuthenticationFilter를 등록할 때 AuthenticationManager를 인자로 넘겨주어야 함.

@@ -1,5 +1,7 @@
 package com.project.sinchon.config.security;
 
+import java.util.Arrays;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -71,6 +73,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         // setAllowedHeaders is important! Without it, OPTIONS preflight request
         // will fail with 403 Invalid CORS request
         configuration.setAllowedHeaders(ImmutableList.of("Access-Control-Allow-Origin", "Authorization", "Cache-Control", "Content-Type"));
+        configuration.setExposedHeaders(Arrays.asList("Authorization")); // ExposedHeader 미설정시 브라우저에서는 기본 응답 헤더 4가지만 노출 
         configuration.setMaxAge(3600L); // preflight 요청을 처리하기 위함
         
         final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
