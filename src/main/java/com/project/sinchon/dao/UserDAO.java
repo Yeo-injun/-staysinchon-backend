@@ -26,6 +26,11 @@ public class UserDAO {
     @Autowired
     private SqlSession sqlSession;
     private static final String namespace = "com.project.sinchon.mapper.user";
+
+    // 아이디 중복 체크
+	public Map idCheck(User user) {
+		return sqlSession.selectOne(namespace + ".idCheck", user);
+	}
     
     // 회원가입
 	public int registerUser(User user) {
@@ -46,5 +51,6 @@ public class UserDAO {
 	public UserDTO getUserDetails(Map<String, String> map) {
 		return sqlSession.selectOne(namespace + ".getUserDetails", map);
 	}
+	
 
 }

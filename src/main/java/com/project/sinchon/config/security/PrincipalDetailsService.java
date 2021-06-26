@@ -19,6 +19,16 @@ public class PrincipalDetailsService implements UserDetailsService {
 	@Autowired
 	private UserDAO userDAO;
 	
+	// 아이디 중복 체크
+	public String idCheck(User user) {
+		Map userID = userDAO.idCheck(user);
+		System.out.println(userID + "________________________ ");
+		if(userID == null) {
+			return "false";
+		}
+		return "true";
+	}
+	
 	// 회원가입 처리
 	public int registerUser(User user) {
 		return userDAO.registerUser(user);
@@ -34,6 +44,8 @@ public class PrincipalDetailsService implements UserDetailsService {
             return new PrincipalDetails(user);
         }
 	}
+
+
 
 
 }

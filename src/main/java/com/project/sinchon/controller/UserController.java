@@ -46,8 +46,15 @@ public class UserController {
     	}
     	
     	return "회원가입 실패...";
-    	
     }
+    
+    // 아이디 중복 체크
+    @PostMapping("/check")
+    public String idCheck(@RequestBody User user) throws Exception {
+    	String isDuplicate = principalDetailsService.idCheck(user);
+    	return isDuplicate;
+    }
+    
 //    
 //    // 로그인
 //    @PostMapping("/login")
