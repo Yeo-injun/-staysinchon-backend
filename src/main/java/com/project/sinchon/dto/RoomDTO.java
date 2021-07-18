@@ -12,6 +12,7 @@ import lombok.Data;
 @Data
 public class RoomDTO {
     private int room_ID;
+    private String room_name;
     private String room_type;
     private String room_img;
     private String bed;
