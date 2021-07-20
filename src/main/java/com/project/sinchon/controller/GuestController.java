@@ -106,9 +106,10 @@ public class GuestController {
     /**
      * @description [예약페이지] 예약신청 폼(form) 화면으로 이동 
      *  21.05.23 인준 : 사용자의 인적사항이 있다면 인적사항 데이터 같이 보내주기 구현(reg_date와 update_date가 다르면 인적사항이 있다는 것) 
+     *  21.07.20 인준 : Post메소드에서 Get메소드로 전환(React에서 화면전환시 Link 태그에 데이터를 넘겨주고, 전환된 화면ㄷ에서 {location}를 파라미터로 받아서 사용 가능해서) 
      */
-    @PostMapping(value = "/reservation/form", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public JsonObject reservationForm(@RequestBody Map<String, Object> reqData, Principal principal) throws Exception{
+    @GetMapping(value = "/reservation/form", produces = {MediaType.APPLICATION_JSON_VALUE})
+    public JsonObject reservationForm(Principal principal) throws Exception{
     	// Gson모듈내 JsonObject클래스로 객체 선언 : Map으로 받은 데이터 JSON형태로 변환하기 위함
     	JsonObject jsonObj = new JsonObject();
     	
@@ -120,18 +121,18 @@ public class GuestController {
     	
 		// reg_date와 update_date가 다른지 확인 : reg_date - update_date 값이 다르면 사용자 인적사항 return해주기
 		if (!userDTO.getReg_date().equals(userDTO.getUpdate_date())) {
+			jsonObj.addProperty("userInfo", true);
+			
 			// 사용자 인적사항 JsonObj에 넣어주기
 			jsonObj.addProperty("firstname", userDTO.getFirstname());
 			jsonObj.addProperty("lastname", userDTO.getLastname());
-			jsonObj.addProperty("sex", userDTO.getSex());
+			jsonObj.addProperty("sex", userDTO.getSex()); 
 			jsonObj.addProperty("country", userDTO.getCountry());
-			jsonObj.addProperty("age_group", userDTO.getNA_foods());
+			jsonObj.addProperty("NA_foods", userDTO.getNA_foods());
+			/* age_group 값 차후 반영 요망 - Service - DAO - Mapper */
+		} else {
+			jsonObj.addProperty("userInfo", false);
 		}
-    	
-    	// check_in값 과 check_out값 room_ID값 JSON으로 다시 넘겨주기
-    	jsonObj.addProperty("check_in", (String) reqData.get("check_in"));
-    	jsonObj.addProperty("check_out", (String) reqData.get("check_out"));
-    	jsonObj.addProperty("room_ID", (String) reqData.get("room_ID"));
     	
     	return jsonObj;
     }
