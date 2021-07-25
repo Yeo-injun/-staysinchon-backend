@@ -14,7 +14,7 @@ import java.util.Date;
 @Data
 public class ApplyReservationDTO {
 	// User테이블 컬럼과 Mapping
-	private String user_ID;
+	private String user_ID; // Back에서 인증 후 값 할당.
 	private String firstname;
 	private String lastname;
 	private int sex; // DB 자료형기준 (0 : 남, 1 : 여)
@@ -23,10 +23,10 @@ public class ApplyReservationDTO {
 	private String NA_foods;
 	
 	// reservation_info테이블 컬럼과 Mapping
-	private int res_ID;
+	private int res_ID; // DB입력시 자동 생성
 	private int room_ID;
-	private Date check_in;
-	private Date check_out;
+	private String check_in; // Date형에서 String으로 바꿈
+	private String check_out; // Date형에서 String으로 바꿈
 	private String stay_purpose;
 	private int num_of_guests;
 	private int payment;
