@@ -129,7 +129,7 @@ public class GuestController {
 			jsonObj.addProperty("sex", userDTO.getSex()); 
 			jsonObj.addProperty("country", userDTO.getCountry());
 			jsonObj.addProperty("NA_foods", userDTO.getNA_foods());
-			/* age_group 값 차후 반영 요망 - Service - DAO - Mapper */
+			jsonObj.addProperty("age_group", userDTO.getAge_group());			
 		} else {
 			jsonObj.addProperty("userInfo", false);
 		}
