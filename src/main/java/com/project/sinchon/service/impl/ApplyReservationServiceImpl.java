@@ -23,6 +23,7 @@ import com.project.sinchon.service.ApplyReservaionService;
 * 2021.04.14 여인준 : 사용자가 입력한 예약정보 DB에 저장
 * 2021.04.17 여인준 : insertReservation 메소드 생성
 * 2021.05.22 여인준 : @Transaction 처리 적용(사용자 인적사항update, 예약정보insert, 예약상태 정보insert, 예약된 방insert)
+* 2021.07.26 여인준 : 인적정보가 이미 입력되어 있는 User는 info Update 미시행
 * */
 
 @Service
@@ -37,8 +38,10 @@ public class ApplyReservationServiceImpl implements ApplyReservaionService {
 	
 	@Override
 	public void insertReservation(ApplyReservationDTO applyReservationDTO) throws Exception {
-		// 사용자 인적사항 update
-		userDAO.updateUserDetails(applyReservationDTO);
+		// 사용자 인적사항 update : orUpdate가 true면 Update
+		if(applyReservationDTO.getOrUpdate()) {
+			userDAO.updateUserDetails(applyReservationDTO);
+		}
 		
 		// 예약정보 Insert
 		reservationDAO.insertInfo(applyReservationDTO);

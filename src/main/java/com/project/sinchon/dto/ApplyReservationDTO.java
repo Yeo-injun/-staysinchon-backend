@@ -13,6 +13,8 @@ import java.util.Date;
 
 @Data
 public class ApplyReservationDTO {
+	private Boolean orUpdate; 
+	
 	// User테이블 컬럼과 Mapping
 	private String user_ID; // Back에서 인증 후 값 할당.
 	private String firstname;
