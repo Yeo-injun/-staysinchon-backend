@@ -41,8 +41,18 @@
 	
 	<!-- 게스트의 예약 현황 및 상태 정보 가져오기 -->
 	<select id="getMyReservationList" resultType="com.project.sinchon.dto.ReservationInfoDTO">
-		SELECT Info.res_ID, Info.res_date, Info.check_in, Info.check_out, Info.stay_purpose, Info.num_of_guests, Info.message, Info.payment, Info.room_ID, State.state
-		FROM reservation_info Info INNER JOIN reservation_state State ON Info.res_ID = State.res_ID
+		SELECT	  Info.res_ID
+				, Info.res_date
+				, Info.check_in
+				, Info.check_out
+				, Info.stay_purpose
+				, Info.num_of_guests
+				, Info.message
+				, Info.payment
+				, Info.room_ID
+				, State.state
+		FROM reservation_info Info INNER JOIN reservation_state State 
+			ON Info.res_ID = State.res_ID
 		WHERE Info.user_ID = #{user_ID}; 
 	</select>
 	
