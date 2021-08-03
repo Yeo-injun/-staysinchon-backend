@@ -45,5 +45,5 @@ public interface ReservationService {
 	 * @return int
 	 * @description 예약 취소하기 
      */
-	int cancelReservation(ReservationCancelDTO reservationCancelDTO);
+	Boolean cancelReservation(ReservationCancelDTO reservationCancelDTO);
 }

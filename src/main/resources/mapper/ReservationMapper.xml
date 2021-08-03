@@ -40,6 +40,7 @@
 	</insert>
 	
 	<!-- 게스트의 예약 현황 및 상태 정보 가져오기 -->
+	<!-- room_name 값도 select해주기 : DTO클래스 수정요망 -->
 	<select id="getMyReservationList" resultType="com.project.sinchon.dto.ReservationInfoDTO">
 		SELECT	  Info.res_ID
 				, Info.res_date
@@ -50,7 +51,7 @@
 				, Info.message
 				, Info.payment
 				, Info.room_ID
-				, State.state
+				, State.state 
 		FROM reservation_info Info INNER JOIN reservation_state State 
 			ON Info.res_ID = State.res_ID
 		WHERE Info.user_ID = #{user_ID}; 
@@ -81,16 +82,20 @@
 	</update>
 	
 	<!-- 취소된 예약 예약취소 테이블에 입력하기 -->
-	<insert id="insertCancelReservation" parameterType="com.project.sinchon.dto.ReservationInfoDTO">
-		INSERT INTO reservation_cancel(res_ID, content)
-		VALUES (#{res_ID}, #{content});
+	<insert id="insertCancelReservation" parameterType="com.project.sinchon.dto.ReservationCancelDTO">
+		INSERT INTO 
+			reservation_cancel
+			(res_ID, content)
+		VALUES 
+			(#{res_ID}, #{content});
 	</insert>
 	
 	<!-- 취소된 예약의 예약상태 변경 -->
-	<update id="updateStateToCancel" parameterType="com.project.sinchon.dto.ReservationInfoDTO">
+	<update id="updateStateToCancel" parameterType="com.project.sinchon.dto.ReservationCancelDTO">
 		UPDATE reservation_state
 		SET	state = 3
-		WHERE res_ID = #{res_ID};
+		WHERE res_ID = #{res_ID}
+		  AND user_ID = #{user_ID};
 	</update>
 	
 

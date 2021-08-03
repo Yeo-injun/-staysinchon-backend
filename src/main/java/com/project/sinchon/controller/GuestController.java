@@ -230,12 +230,20 @@ public class GuestController {
      * @description [마이페이지] 예약취소하기  
      * <추가 수정 요구사항>
      * 21.04.22 인준 : 권한관리 (비회원에 대한 접근을 막고, 로그인한 user_ID 정보를 사용해야 함.) / 수정데이터를 받을 객체 수정(수정항목만 받을 객체로 생성) / DAO호출 2개하는 것을 프로시저로 작성!
+     * 21.08.02 인준 : principal을 통해 user_ID를 DTO에 담아서 Service Layer로 넘겨줌. 예약상태 테이블 변경할때 user_ID값도 조건으로 넣어서 SQL update실행
      */
     @PutMapping(value = "/reservation/cancel", produces = {MediaType.APPLICATION_JSON_VALUE}, consumes = {MediaType.APPLICATION_JSON_VALUE})
-    public String cancelReservation(@RequestBody ReservationCancelDTO reservationCancelVO) throws Exception {
-    	int isSuccess = reservationService.cancelReservation(reservationCancelVO);
-    	return "성공!";
-//    	if (isSuccess == 1) {return "정상적으로 예약이 취소됐습니다!";} 
-//    	else {return "취소가 안됐습니다.. ㅠ 재시도해주세요";}
+    public String cancelReservation(@RequestBody ReservationCancelDTO reservationCancelDTO, Principal principal) throws Exception {
+    	// Principal에서 사용자 아이디 가지고 와서 DTO에 할당
+    	String user_ID = principal.getName();
+    	reservationCancelDTO.setUser_ID(user_ID);
+    	    	
+    	Boolean isSuccess = reservationService.cancelReservation(reservationCancelDTO);
+    	if (isSuccess) {
+        	return "성공!";
+    	} else {
+        	return "실패!";
+    	}
+
     }
 }// End
