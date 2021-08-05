@@ -6,11 +6,14 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.project.sinchon.dao.ReservationDAO;
 import com.project.sinchon.dto.ReservationCancelDTO;
 import com.project.sinchon.dto.ReservationInfoDTO;
 import com.project.sinchon.service.ReservationService;
+
+import lombok.extern.slf4j.Slf4j;
 
 /*
 *
@@ -21,6 +24,8 @@ import com.project.sinchon.service.ReservationService;
 * */
 
 @Service
+@Transactional
+@Slf4j
 public class ReservationServiceImpl implements ReservationService {
 	
 	@Autowired
@@ -61,6 +66,8 @@ public class ReservationServiceImpl implements ReservationService {
 		
 		// 예약된 방 테이블에서 해당 res_ID 값 삭제하기
 		int isOkDelete = reservationDAO.deleteReservationRoom(reservationCancelDTO);
+		log.info("삭제할 res_ID : {}", reservationCancelDTO.getRes_ID());
+		log.info("삭제 DAO 정상작동? : {}", isOkDelete);
 		
 		if (isOkInsert == 1 && isOkUpdate == 1 && isOkDelete > 0) {return true;}
 		else {return false;}

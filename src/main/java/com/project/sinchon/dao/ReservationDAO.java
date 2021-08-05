@@ -73,7 +73,7 @@ public class ReservationDAO {
 
 	// 예약 취소된 res_ID로 예약된 방테이블 방정보 제거
 	public int deleteReservationRoom(ReservationCancelDTO reservationCancelDTO) {
-		return sqlSession.delete(namespace + ".deleteReservationRoom");
+		return sqlSession.delete(namespace + ".deleteReservationRoom", reservationCancelDTO);
 	}
 
 }
