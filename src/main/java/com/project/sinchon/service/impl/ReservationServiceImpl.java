@@ -52,14 +52,17 @@ public class ReservationServiceImpl implements ReservationService {
 
 	// 
 	@Override
-	public Boolean cancelReservation(ReservationCancelDTO reservationCancelVO) {
-		//예약취소 테이블에 취소된 예약 입력하기
-		int isOKInsert = reservationDAO.insertCancelReservation(reservationCancelVO);
+	public Boolean cancelReservation(ReservationCancelDTO reservationCancelDTO) {
+		// 예약취소 테이블에 취소된 예약 입력하기
+		int isOkInsert = reservationDAO.insertCancelReservation(reservationCancelDTO);
 		
-		//예약상태 테이블 상태정보 변경 : 3 (예약취소상태)
-		int isOKUpdate = reservationDAO.updateStateToCancel(reservationCancelVO);
+		// 예약상태 테이블 상태정보 변경 : 3 (예약취소상태)
+		int isOkUpdate = reservationDAO.updateStateToCancel(reservationCancelDTO);
 		
-		if (isOKInsert == 1 && isOKUpdate == 1) {return true;}
+		// 예약된 방 테이블에서 해당 res_ID 값 삭제하기
+		int isOkDelete = reservationDAO.deleteReservationRoom(reservationCancelDTO);
+		
+		if (isOkInsert == 1 && isOkUpdate == 1 && isOkDelete > 0) {return true;}
 		else {return false;}
 	}
 }

@@ -98,5 +98,9 @@
 		  AND user_ID = #{user_ID};
 	</update>
 	
-
+	<!-- 취소된 res_ID로 예약된 방 테이블에서 예약일정 삭제 -->
+	<delete id="deleteReservationRoom" parameterType="com.project.sinchon.dto.ReservationCancelDTO">
+		DELETE FROM reservation_room
+		WHERE res_ID = #{res_ID}
+	</delete>
 </mapper>
