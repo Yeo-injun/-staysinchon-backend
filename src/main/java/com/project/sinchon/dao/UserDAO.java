@@ -46,6 +46,11 @@ public class UserDAO {
 	public void updateUserDetails(ApplyReservationDTO applyReservationDTO) {
 		sqlSession.update(namespace + ".updateUserDetails", applyReservationDTO);
 	}
+
+	// MyPage에서 회원정보 수정
+	public int updateUserDetails(UserDTO userDTO) {
+		return sqlSession.update(namespace + ".updateUserProfile", userDTO);
+	}
 	
 	// 사용자 인적사항 가져오기
 	public UserDTO getUserDetails(Map<String, String> map) {

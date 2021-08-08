@@ -24,11 +24,19 @@ public class UserServiceImpl implements UserService {
 	private UserDAO userDAO;
 	
 	 /**
-     * @description 사용자 인적사항 가져오기
+     * @description 회원 인적사항 가져오기
      */
 	@Override
 	public UserDTO getUserDetails(Map<String, String> map) throws Exception {		
 		return userDAO.getUserDetails(map);
+	}
+
+	/**
+     * @description 회원 인적사항 수정하기
+     */
+	@Override
+	public int updateUserProfile(UserDTO userDTO) {
+		return userDAO.updateUserDetails(userDTO);
 	}
 
 }

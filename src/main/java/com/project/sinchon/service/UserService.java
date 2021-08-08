@@ -14,7 +14,12 @@ import com.project.sinchon.dto.UserDTO;
 
 public interface UserService {
 	 /**
-     * @description 사용자 인적사항 가져오기
+     * @description 회원 인적사항 가져오기
      */
-	public UserDTO getUserDetails(Map<String, String> map) throws Exception; 
+	public UserDTO getUserDetails(Map<String, String> map) throws Exception;
+
+	/**
+     * @description 회원 인적사항 수정하기
+     */
+	public int updateUserProfile(UserDTO userDTO); 
 }

@@ -10,6 +10,7 @@ import org.springframework.http.MediaType;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -80,6 +81,18 @@ public class UserController {
     	
     	UserDTO result = userService.getUserDetails(params);
     	return result;
+    }
+    
+    // 회원정보 수정하기
+    @PutMapping(value = "/profile", consumes = {MediaType.APPLICATION_JSON_VALUE})
+    public String updateUserProfile(@RequestBody UserDTO userDTO, Principal principal) {
+    	String userId = principal.getName();
+    	userDTO.setUser_ID(userId);
+    	
+    	int isSuccess = userService.updateUserProfile(userDTO);
+    	
+    	if (isSuccess > 0) { return "성공"; }
+    	else {return "실패"; }
     }
     
 }
