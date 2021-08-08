@@ -60,4 +60,10 @@
 		FROM user
 		WHERE user_ID = #{user_ID}
 	</select>
+	
+	<select id="checkPasswordForProfileUpdate" resultType="String">
+		SELECT pwd
+		FROM user
+		WHERE user_ID = #{userId}
+	</select>
 </mapper>

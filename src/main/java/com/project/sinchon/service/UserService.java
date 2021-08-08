@@ -21,5 +21,10 @@ public interface UserService {
 	/**
      * @description 회원 인적사항 수정하기
      */
-	public int updateUserProfile(UserDTO userDTO); 
+	public int updateUserProfile(UserDTO userDTO);
+
+	/**
+     * @description 회원 정보 수정시 비밀번호 확인
+     */
+	public String checkPasswordForProfileUpdate(String userId); 
 }

@@ -95,4 +95,15 @@ public class UserController {
     	else {return "실패"; }
     }
     
+    // 회원정보 수정시 비밀번호 확인하기
+    @PostMapping(value="/profile/check", consumes = {MediaType.APPLICATION_JSON_VALUE})
+    public boolean checkPasswordForProfileUpdate(@RequestBody UserDTO userDTO, Principal principal ) {
+    	// 회원 아이디로 비밀번호 가져오기
+    	String userId = principal.getName();
+    	String encodedPassword =  userService.checkPasswordForProfileUpdate(userId);
+    	String rawPassword = userDTO.getPwd();
+    	
+    	return passwordEncoder.matches(rawPassword, encodedPassword);
+    }
+    
 }

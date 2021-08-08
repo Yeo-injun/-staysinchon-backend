@@ -3,6 +3,7 @@ package com.project.sinchon.service.impl;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.project.sinchon.dao.UserDAO;
@@ -20,8 +21,12 @@ import com.project.sinchon.service.UserService;
 
 @Service
 public class UserServiceImpl implements UserService {
+
 	@Autowired
 	private UserDAO userDAO;
+	
+ 
+	
 	
 	 /**
      * @description 회원 인적사항 가져오기
@@ -37,6 +42,15 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public int updateUserProfile(UserDTO userDTO) {
 		return userDAO.updateUserDetails(userDTO);
+	}
+
+	/**
+     * @description 회원 정보 수정시 비밀번호 확인
+     */
+	public String checkPasswordForProfileUpdate(String userId) {
+		
+		
+		return userDAO.checkPasswordForProfileUpdate(userId);
 	}
 
 }

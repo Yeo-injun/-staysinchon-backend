@@ -56,6 +56,10 @@ public class UserDAO {
 	public UserDTO getUserDetails(Map<String, String> map) {
 		return sqlSession.selectOne(namespace + ".getUserDetails", map);
 	}
+
+	public String checkPasswordForProfileUpdate(String userId) {
+		return sqlSession.selectOne(namespace + ".checkPasswordForProfileUpdate", userId);
+	}
 	
 
 }
