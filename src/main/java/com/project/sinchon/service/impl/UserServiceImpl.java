@@ -25,9 +25,6 @@ public class UserServiceImpl implements UserService {
 	@Autowired
 	private UserDAO userDAO;
 	
- 
-	
-	
 	 /**
      * @description 회원 인적사항 가져오기
      */
