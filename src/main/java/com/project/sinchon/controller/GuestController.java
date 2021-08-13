@@ -97,6 +97,7 @@ public class GuestController {
     	return roomService.getSearchReservableRoomList(paramsMap);
     }
 
+    // return값은 DTO객체 -------------------------------------------------------------------------------------------------------------//
 
     /**
      * @description [예약페이지] 예약신청 폼(form) 화면으로 이동 

@@ -35,7 +35,7 @@
 	</select>
 	
 	<!-- 예약가능한 방 출력하기 : 사용자 입력값에 따라 출력 -->
-	<select id="getSearchReservableRoomList" parameterType="Map" resultType="com.project.sinchon.dto.RoomDTO">
+	<select id="getSearchReservableRoomList" resultType="com.project.sinchon.dto.RoomDTO">
 		SELECT room_ID
 			 , room_name
 			 , room_type

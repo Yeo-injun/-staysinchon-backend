@@ -49,5 +49,4 @@ public class RoomDAO {
 		return sqlSession.selectList(namespace + ".getSearchReservableRoomList", paramsMap);
 	}
 
-
 }
