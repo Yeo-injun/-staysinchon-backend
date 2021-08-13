@@ -1,8 +1,8 @@
 package com.project.sinchon.service.impl;
 
 import java.sql.Date;
-import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -31,23 +31,25 @@ public class RoomServiceImpl implements RoomService {
      * @description 호스트가 등록한 모든 방 조회
      */
 	@Override
-	public List<RoomDTO> getList() throws Exception {
-		return roomDAO.getList();
+	public List<RoomDTO> getRoomList() throws Exception {
+		return roomDAO.getRoomList();
 	}
 	
 	/**
      * @description 예약가능한 방 리스트 출력 (기본값 : 접속일 기준 1박2일로 예약가능한 방 조회)
      */	
 	@Override
-	public List<RoomDTO> getAbleList() throws Exception {
-		return roomDAO.getAbleList();
+	public List<RoomDTO> getReservableRoomListDefaultSearch() throws Exception {
+		return roomDAO.getReservableRoomListDefaultSearch();
 	}
 
+	
 	 /**
-     * @description 예약가능한 방 리스트 출력 (사용자 입력값에 따라 출력)
-     */	
+    * @description 예약가능한 방 리스트 출력 (사용자 입력값에 따라 출력)
+    */	
 	@Override
-	public List<RoomDTO> getSearchList(HashMap<String, Date> dateMap) {
-		return roomDAO.getSearchList(dateMap);
+	public List<RoomDTO> getSearchReservableRoomList(Map<String, Date> paramsMap) throws Exception {
+		return roomDAO.getSearchReservableRoomList(paramsMap);
 	}
+
 }

@@ -53,7 +53,7 @@ import com.project.sinchon.service.UserService;
 @RequestMapping(value = "/*")
 public class GuestController {
     
-    @Autowired // 확인사항 : Inject과 차이
+    @Autowired 
     private RoomService roomService;
     
     @Autowired
@@ -69,38 +69,32 @@ public class GuestController {
      * @description [예약페이지] 모든 방 조회
      */
     @GetMapping(value = "/rooms", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public List<RoomDTO> roomList() throws Exception{
-    	System.out.println("URL 요청됨");
-        return roomService.getList();
+    public List<RoomDTO> getRoomList() throws Exception {
+        return roomService.getRoomList();
     }
+    
     
     /**
      * @description [예약페이지] 예약가능한 방 기본값 조회(기본값 : 현재일 기준 1박 2일 예약가능한 방)
      */
     @GetMapping(value = "/rooms/available", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public List<RoomDTO> roomAbleList(Authentication auth) throws Exception{
-        return roomService.getAbleList();
+    public List<RoomDTO> getReservableRoomListDefaultSearch(Authentication auth) throws Exception 
+    {
+        return roomService.getReservableRoomListDefaultSearch();
     }
+    
     
     /**
      * @description [예약페이지] 예약가능한 방 검색(파라미터 : check in 날짜, check out 날짜) 
      */
     @GetMapping(value = "/rooms/search", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public List<RoomDTO> searchRoomList(@RequestParam("check_in") String checkIn,
-    									@RequestParam("check_out") String checkOut) throws Exception{
-    	// 사용자가 입력한 날짜를 담을 map객체 생성
-    	HashMap<String, Date> dateMap = new HashMap<String, Date>();
-        
-    	// 사용자 입력 날짜 자료형 변형(String to Date)
-    	Date dateCheckIn = Date.valueOf(checkIn);
-        Date dateCheckOut = Date.valueOf(checkOut);
-        
-        // 입력받은 날짜 map객체에 담아주기
-        dateMap.put("checkIn", dateCheckIn);
-        dateMap.put("checkOut", dateCheckOut);
-    	
-        // Service 레이어 호출시 입력받은 날짜가 담긴 dateMap을 인자로 넣어서 호출
-    	return roomService.getSearchList(dateMap);
+    public List<RoomDTO> getSearchReservableRoomList(@RequestParam("check_in") String checkIn,
+    												 @RequestParam("check_out") String checkOut) throws Exception 
+    {	
+    	Map<String, Date> paramsMap = new HashMap<String, Date>();
+        paramsMap.put("checkIn", Date.valueOf(checkIn));
+        paramsMap.put("checkOut", Date.valueOf(checkOut));
+    	return roomService.getSearchReservableRoomList(paramsMap);
     }
 
 
