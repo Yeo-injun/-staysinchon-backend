@@ -74,14 +74,13 @@ public class UserController {
     
     // 회원정보 보여주기 : 스프링 시큐리티에서 Auth체크를 진행하고, 통과하면 Principal객체를 반환함. 이 객체에 userID정보가 있어 이를 가져와서 회원정보를 가져오기
     @GetMapping(value = "/profile", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public UserDTO getUserProfile(Principal principal) throws Exception {
-    	String userId = principal.getName();
-    	Map params = new HashMap();
-    	params.put("user_ID", userId);
-    	
-    	UserDTO result = userService.getUserDetails(params);
+    public UserDTO getUserProfile(Principal principal) throws Exception 
+    {
+    	String userId = principal.getName();	
+    	UserDTO result = userService.getUserDetails(userId);
     	return result;
     }
+    
     
     // 회원정보 수정하기
     @PutMapping(value = "/profile", consumes = {MediaType.APPLICATION_JSON_VALUE})

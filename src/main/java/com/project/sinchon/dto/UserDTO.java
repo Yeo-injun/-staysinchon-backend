@@ -35,4 +35,6 @@ public class UserDTO {
     private int age_group;
     private String NA_foods;
     
+    // 예약신청시 User Profile값 존재유무 값 체크
+    private boolean userInfo;
 }

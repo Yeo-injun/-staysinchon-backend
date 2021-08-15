@@ -16,7 +16,7 @@ public interface UserService {
 	 /**
      * @description 회원 인적사항 가져오기
      */
-	public UserDTO getUserDetails(Map<String, String> map) throws Exception;
+	public UserDTO getUserDetails(String userId) throws Exception;
 
 	/**
      * @description 회원 인적사항 수정하기
@@ -26,5 +26,11 @@ public interface UserService {
 	/**
      * @description 회원 정보 수정시 비밀번호 확인
      */
-	public String checkPasswordForProfileUpdate(String userId); 
+	public String checkPasswordForProfileUpdate(String userId);
+
+	 /**
+     * @description 회원 프로필 가져오기 : 예약할때 입력된 회원정보가 있을 경우 회원정보 return
+     */
+	public UserDTO getUserProfileForReservation(String userId);
+
 }

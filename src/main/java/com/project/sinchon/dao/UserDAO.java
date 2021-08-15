@@ -53,13 +53,12 @@ public class UserDAO {
 	}
 	
 	// 사용자 인적사항 가져오기
-	public UserDTO getUserDetails(Map<String, String> map) {
-		return sqlSession.selectOne(namespace + ".getUserDetails", map);
+	public UserDTO getUserDetails(String userId) {
+		return sqlSession.selectOne(namespace + ".getUserDetails", userId);
 	}
 
 	public String checkPasswordForProfileUpdate(String userId) {
 		return sqlSession.selectOne(namespace + ".checkPasswordForProfileUpdate", userId);
 	}
-	
 
 }

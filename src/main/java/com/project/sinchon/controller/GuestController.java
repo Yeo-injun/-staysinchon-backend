@@ -69,7 +69,8 @@ public class GuestController {
      * @description [예약페이지] 모든 방 조회
      */
     @GetMapping(value = "/rooms", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public List<RoomDTO> getRoomList() throws Exception {
+    public List<RoomDTO> getRoomList() throws Exception 
+    {
         return roomService.getRoomList();
     }
     
@@ -102,35 +103,14 @@ public class GuestController {
     /**
      * @description [예약페이지] 예약신청 폼(form) 화면으로 이동 
      *  21.05.23 인준 : 사용자의 인적사항이 있다면 인적사항 데이터 같이 보내주기 구현(reg_date와 update_date가 다르면 인적사항이 있다는 것) 
-     *  21.07.20 인준 : Post메소드에서 Get메소드로 전환(React에서 화면전환시 Link 태그에 데이터를 넘겨주고, 전환된 화면ㄷ에서 {location}를 파라미터로 받아서 사용 가능해서) 
+     *  21.07.20 인준 : Post메소드에서 Get메소드로 전환(React에서 화면전환시 Link 태그에 데이터를 넘겨주고, 전환된 화면에서 {location}를 파라미터로 받아서 사용 가능해서) 
      */
     @GetMapping(value = "/reservation/form", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public JsonObject reservationForm(Principal principal) throws Exception{
-    	// Gson모듈내 JsonObject클래스로 객체 선언 : Map으로 받은 데이터 JSON형태로 변환하기 위함
-    	JsonObject jsonObj = new JsonObject();
-    	
+    public UserDTO getUserProfileForReservation(Principal principal) throws Exception
+    {
     	// 인증된 사용자의 user데이터 가져오기  
-    	Map<String, String> map = new HashMap<String, String>();
-    	String user_ID = principal.getName();
-    	map.put("user_ID", user_ID);
-    	UserDTO userDTO = userService.getUserDetails(map);
-    	
-		// reg_date와 update_date가 다른지 확인 : reg_date - update_date 값이 다르면 사용자 인적사항 return해주기
-		if (!userDTO.getReg_date().equals(userDTO.getUpdate_date())) {
-			jsonObj.addProperty("userInfo", true);
-			
-			// 사용자 인적사항 JsonObj에 넣어주기
-			jsonObj.addProperty("firstname", userDTO.getFirstname());
-			jsonObj.addProperty("lastname", userDTO.getLastname());
-			jsonObj.addProperty("sex", userDTO.getSex()); 
-			jsonObj.addProperty("country", userDTO.getCountry());
-			jsonObj.addProperty("NA_foods", userDTO.getNA_foods());
-			jsonObj.addProperty("age_group", userDTO.getAge_group());			
-		} else {
-			jsonObj.addProperty("userInfo", false);
-		}
-    	
-    	return jsonObj;
+    	String userId = principal.getName();
+    	return userService.getUserProfileForReservation(userId);
     }
 
     /**

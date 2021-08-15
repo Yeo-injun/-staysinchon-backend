@@ -29,8 +29,8 @@ public class UserServiceImpl implements UserService {
      * @description 회원 인적사항 가져오기
      */
 	@Override
-	public UserDTO getUserDetails(Map<String, String> map) throws Exception {		
-		return userDAO.getUserDetails(map);
+	public UserDTO getUserDetails(String userId) throws Exception {		
+		return userDAO.getUserDetails(userId);
 	}
 
 	/**
@@ -48,6 +48,25 @@ public class UserServiceImpl implements UserService {
 		
 		
 		return userDAO.checkPasswordForProfileUpdate(userId);
+	}
+
+	
+	 /**
+     * @description 회원 프로필 가져오기 : 예약할때 입력된 회원정보가 있을 경우 회원정보 return
+     */
+	@Override
+	public UserDTO getUserProfileForReservation(String userId) {
+		UserDTO sqlResult = userDAO.getUserDetails(userId);
+		
+		// reg_date와 update_date가 다른지 확인 : reg_date - update_date 값이 다르면 사용자 인적사항 return해주기
+		if (!sqlResult.getReg_date().equals(sqlResult.getUpdate_date())) {
+			sqlResult.setUserInfo(true);			
+			return sqlResult;			
+		} else {
+			UserDTO userDTO = new UserDTO();
+			userDTO.setUserInfo(false);
+			return userDTO;
+		}
 	}
 
 }

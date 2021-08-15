@@ -48,7 +48,7 @@
 		WHERE user_ID = #{user_ID}
 	</update>
 	
-	<select id="getUserDetails" resultType="com.project.sinchon.dto.UserDTO">
+	<select id="getUserDetails" parameterType="String" resultType="com.project.sinchon.dto.UserDTO">
 		SELECT 	firstname
 			  , lastname
 			  , sex
@@ -58,7 +58,7 @@
 			  , reg_date
 			  , update_date
 		FROM user
-		WHERE user_ID = #{user_ID}
+		WHERE user_ID = #{userId}
 	</select>
 	
 	<select id="checkPasswordForProfileUpdate" resultType="String">
