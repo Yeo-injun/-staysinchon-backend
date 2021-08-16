@@ -11,6 +11,7 @@ import org.springframework.stereotype.Repository;
 import com.project.sinchon.dto.ApplyReservationDTO;
 import com.project.sinchon.dto.ReservationCancelDTO;
 import com.project.sinchon.dto.ReservationInfoDTO;
+import com.project.sinchon.entity.ReservationInfoEntity;
 
 /*
 *
@@ -28,16 +29,22 @@ public class ReservationDAO {
     private SqlSession sqlSession;
     private static final String namespace = "com.project.sinchon.mapper.reservation";
 	
-	// 예약정보 테이블 insert
+	/* 21.08.16 수정 :  예약정보 테이블 insert */
 	public int insertInfo(ApplyReservationDTO applyReservationDTO) {
 		return sqlSession.insert(namespace + ".insertInfo", applyReservationDTO);
 	}
+	
+	public int insertReservationInfo(ReservationInfoEntity reservationInfoEntity) {
+		return sqlSession.insert(namespace + ".insertReservationInfo", reservationInfoEntity);		
+	} /* insertInfo 수정 21.08.16 */
+	
+	
+	
 
 	// 예약된 방 테이블, 예약상태 테이블 insert >> insert_room_and_state 프로시저 호출
-	public void insertRoomAndState(HashMap<String, Object> map) {
-		sqlSession.insert(namespace + ".insertRoomAndState", map);
-		
-	}
+	public int insertRoomAndState(Map<String, Object> paramsMap) {
+		return sqlSession.insert(namespace + ".insertRoomAndState", paramsMap);
+	} /* 수정 21.08.16 */
 
 	// 게스트의 예약 현황 및 상태 정보 가져오기
 	public List<ReservationInfoDTO> getMyReservationList(HashMap<String, String> map) {
@@ -75,5 +82,7 @@ public class ReservationDAO {
 	public int deleteReservationRoom(ReservationCancelDTO reservationCancelDTO) {
 		return sqlSession.delete(namespace + ".deleteReservationRoom", reservationCancelDTO);
 	}
+
+
 
 }

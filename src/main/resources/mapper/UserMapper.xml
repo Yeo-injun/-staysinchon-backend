@@ -21,32 +21,21 @@
 		FROM user
 		WHERE user_ID = #{user_ID}
 	</select>
-	
-	<!-- 예약신청시 사용자가 입력한 정보 저장 -->
-	<update id="updateUserDetails" parameterType="com.project.sinchon.dto.ApplyReservationDTO">
-		UPDATE user
-		SET	firstname = #{firstname},
-			lastname = #{lastname},
-			sex = #{sex},
-			country = #{country},
-			age_group = #{age_group},
-			NA_foods = #{NA_foods},
-			update_date = NOW()
-		WHERE user_ID = #{user_ID}
-	</update>
-	
+
 	<!-- MyPage에서 회원정보 수정 -->
-	<update id="updateUserProfile" parameterType="com.project.sinchon.dto.UserDTO">
+	<update id="updateUserProfile" parameterType="com.project.sinchon.entity.UserEntity">
 		UPDATE user
 		SET	firstname = #{firstname},
 			lastname = #{lastname},
 			sex = #{sex},
 			country = #{country},
-			age_group = #{age_group},
-			NA_foods = #{NA_foods},
+			age_group = #{ageGroup},
+			NA_foods = #{NaFoods},
 			update_date = NOW()
-		WHERE user_ID = #{user_ID}
+		WHERE user_ID = #{userId}
 	</update>
+	
+	
 	
 	<select id="getUserDetails" parameterType="String" resultType="com.project.sinchon.dto.UserDTO">
 		SELECT 	firstname

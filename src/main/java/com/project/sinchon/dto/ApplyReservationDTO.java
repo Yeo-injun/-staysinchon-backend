@@ -1,6 +1,8 @@
 package com.project.sinchon.dto;
 
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.Date;
 
@@ -11,7 +13,8 @@ import java.util.Date;
  *
  * */
 
-@Data
+@Getter
+@Setter
 public class ApplyReservationDTO {
 	private Boolean orUpdate; 
 	

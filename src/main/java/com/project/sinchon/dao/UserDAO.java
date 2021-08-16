@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 import com.project.sinchon.config.security.auth.User;
 import com.project.sinchon.dto.ApplyReservationDTO;
 import com.project.sinchon.dto.UserDTO;
+import com.project.sinchon.entity.UserEntity;
 
 
 /*
@@ -42,15 +43,21 @@ public class UserDAO {
 		return sqlSession.selectOne(namespace + ".findByUserId", user_ID);
 	}
 
-	// 예약신청시 입력하는 사용자 정보 저장
-	public void updateUserDetails(ApplyReservationDTO applyReservationDTO) {
-		sqlSession.update(namespace + ".updateUserDetails", applyReservationDTO);
-	}
-
-	// MyPage에서 회원정보 수정
+	
+	
+	/* 예약신청시 입력하는 사용자 정보 저장 @@@@@ 21.08.16 대체된 코드 @@@@@ */
 	public int updateUserDetails(UserDTO userDTO) {
-		return sqlSession.update(namespace + ".updateUserProfile", userDTO);
+		return sqlSession.update(namespace + ".updateUserDetails", userDTO);
 	}
+	
+	
+	// 회원정보 수정 /* 대체 코드 */ 기존 MyPage에서만 사용했지만 예약신청할때도 동일하게 사용
+	public int updateUserProfile(UserEntity userEntity) {
+		return sqlSession.update(namespace + ".updateUserProfile", userEntity);
+	}
+	
+	
+	
 	
 	// 사용자 인적사항 가져오기
 	public UserDTO getUserDetails(String userId) {
@@ -60,5 +67,9 @@ public class UserDAO {
 	public String checkPasswordForProfileUpdate(String userId) {
 		return sqlSession.selectOne(namespace + ".checkPasswordForProfileUpdate", userId);
 	}
+
+
+
+
 
 }

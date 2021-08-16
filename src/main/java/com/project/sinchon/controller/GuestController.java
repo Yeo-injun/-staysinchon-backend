@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.JsonObject;
-import com.project.sinchon.dto.ApplyReservationDTO;
+import com.project.sinchon.dto.ReservationApplicationInfoDTO;
 import com.project.sinchon.dto.ReservationCancelDTO;
 import com.project.sinchon.dto.ReservationInfoDTO;
 import com.project.sinchon.dto.RoomDTO;
@@ -98,7 +98,6 @@ public class GuestController {
     	return roomService.getSearchReservableRoomList(paramsMap);
     }
 
-    // return값은 DTO객체로 수정 -------------------------------------------------------------------------------------------------------------//
 
     /**
      * @description [예약페이지] 예약신청 폼(form) 화면으로 이동 
@@ -113,24 +112,24 @@ public class GuestController {
     	return userService.getUserProfileForReservation(userId);
     }
 
+    
     /**
      * @description [예약페이지] 예약신청하기 
-     * 프론트엔드와 통신시 RequestBody의 데이터 형태 확인
      * <추가 수정 요구사항>
      * 21.04.22 인준 : 비회원에 대한 접근을 막고, 로그인한 user_ID 정보를 사용해야 함. 
      * 21.05.20 인준 : Security 구현으로 회원일 경우에만 접근가능하고, Principal객체를 매개변수로 받아서 요청 Header에 있는 토큰으로 user_ID 추출
      * 21.05.22 인준 : 예약 신청시 사용자의 인적사항도 함께 저장 및 트랜잭션 처리 구현 완료
      */
     @PostMapping(value = "/reservation", produces = {MediaType.APPLICATION_JSON_VALUE}, consumes = {MediaType.APPLICATION_JSON_VALUE})
-    public void applyReservation(@RequestBody ApplyReservationDTO applyReservationDTO, Principal principal) throws Exception {
-    	// 사용자 입력 데이터가 JSON형태로 들어와서 @RequestBody를 거쳐서 VO객체의 변수들과 매핑됨
-    	// user_ID는 Principal을 매개변수로 받아서 .getName() 함수로 user_ID값 받아옴
-    	String user_ID = principal.getName();
-    	applyReservationDTO.setUser_ID(user_ID);
-    	
-    	applyReservationService.insertReservation(applyReservationDTO);
+    public void applyReservation(@RequestBody ReservationApplicationInfoDTO dto, Principal principal) throws Exception 
+    {
+    	String userId = principal.getName();
+    	dto.getUserEntity().setUserId(userId);
+    	dto.getReservationInfoEntity().setUserId(userId);
+    	reservationService.applyReservation(dto);
     }
 
+    
     /**
      * @description [마이페이지] 본인 예약 이력 및 현황 확인하기
      * 2021.04.21 user_ID를 url로 받아와서 해당 사용자의 예약 이력정보를 조회 (로그인 구현후 수정 예정)

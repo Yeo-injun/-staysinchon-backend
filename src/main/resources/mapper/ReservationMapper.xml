@@ -31,11 +31,40 @@
 			#{room_ID})
 	</insert>
 	
+	<!-- 수정 완료 : 예약정보 테이블에 사용자가 입력한 예약정보 저장 -->	
+	<insert id="insertReservationInfo" parameterType="com.project.sinchon.entity.ReservationInfoEntity">
+	<!-- res_ID로 PK값 생성후 해당값을 INSERT구문에 넣어줌. -->
+		<selectKey resultType="int" keyProperty="resId" order="BEFORE">
+        	SELECT IFNULL(max(res_ID),0)+1 as resId
+			FROM reservation_info
+    	</selectKey>
+		INSERT INTO reservation_info (
+				res_ID
+			  , check_in 
+			  , check_out
+			  , stay_purpose 
+			  , num_of_guests 
+			  , payment
+			  , message
+			  , user_ID 
+			  , room_ID )
+		VALUES (
+				#{resId}
+			  ,	#{checkIn}
+			  ,	#{checkOut}
+			  ,	#{stayPurpose}
+			  ,	#{numOfGuests}
+			  ,	#{payment}
+			  ,	#{message}
+			  ,	#{userId}
+			  ,	#{roomId} )
+	</insert>
+	
 	<!-- insertInfo를 통해 생성된 res_ID로 Procedure 호출 : 예약된 방 테이블, 예약상태 테이블 레코드 생성 -->
-	<insert id="insertRoomAndState" parameterType="HashMap">
+	<insert id="insertRoomAndState" parameterType="Map">
 		{ CALL insert_room_and_state (
-			#{res_ID},
-			#{user_ID})
+			#{resId},
+			#{userId})
 		}
 	</insert>
 	

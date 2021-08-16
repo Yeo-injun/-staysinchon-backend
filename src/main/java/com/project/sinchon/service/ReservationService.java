@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.project.sinchon.dto.ReservationApplicationInfoDTO;
 import com.project.sinchon.dto.ReservationCancelDTO;
 import com.project.sinchon.dto.ReservationInfoDTO;
 
@@ -46,4 +47,12 @@ public interface ReservationService {
 	 * @description 예약 취소하기 
      */
 	Boolean cancelReservation(ReservationCancelDTO reservationCancelDTO);
+
+	 /**
+     * @param ReservationApplicationInfoDTO
+	 * @return void
+	 * @throws Exception 
+	 * @description 예약 신청하기 
+     */
+	void applyReservation(ReservationApplicationInfoDTO dto) throws Exception;
 }

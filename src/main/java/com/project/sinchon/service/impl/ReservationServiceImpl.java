@@ -9,6 +9,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.project.sinchon.dao.ReservationDAO;
+import com.project.sinchon.dao.UserDAO;
+import com.project.sinchon.dto.ReservationApplicationInfoDTO;
 import com.project.sinchon.dto.ReservationCancelDTO;
 import com.project.sinchon.dto.ReservationInfoDTO;
 import com.project.sinchon.service.ReservationService;
@@ -30,6 +32,30 @@ public class ReservationServiceImpl implements ReservationService {
 	
 	@Autowired
 	private ReservationDAO reservationDAO;
+	
+	@Autowired
+	private UserDAO userDAO;
+	
+	// 사용자가 신청한 예약내용 저장하기
+	@Override
+	public void applyReservation(ReservationApplicationInfoDTO dto) throws Exception {
+		// 사용자 인적사항 update : orUpdate가 true면 Update
+		if(dto.getOrUpdate()) {
+			userDAO.updateUserProfile(dto.getUserEntity());
+		}
+		
+		// 예약정보 Insert
+		reservationDAO.insertReservationInfo(dto.getReservationInfoEntity());
+		
+		// 예약된 방, 예약상태 테이블 레코드를 생성하기 위해 필요한 res_ID, user_ID값 map객체에 넣어주기
+		Map<String, Object> paramsMap = new HashMap<>();
+		paramsMap.put("resId", dto.getReservationInfoEntity().getResId());
+		paramsMap.put("userId", dto.getUserEntity().getUserId());
+
+		// 예약된 방 테이블, 예약 상태 테이블에 데이터 Insert
+		reservationDAO.insertRoomAndState(paramsMap);
+	}
+	
 	
 	// 사용자가 예약한 예약현황 및 상태 정보 가져오기 
 	@Override
@@ -72,4 +98,6 @@ public class ReservationServiceImpl implements ReservationService {
 		if (isOkInsert == 1 && isOkUpdate == 1 && isOkDelete > 0) {return true;}
 		else {return false;}
 	}
+
+
 }
