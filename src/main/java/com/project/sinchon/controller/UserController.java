@@ -21,6 +21,7 @@ import com.project.sinchon.config.security.auth.User;
 import com.project.sinchon.config.security.jwt.JwtTokenProvider;
 import com.project.sinchon.dao.UserDAO;
 import com.project.sinchon.dto.UserDTO;
+import com.project.sinchon.entity.UserEntity;
 import com.project.sinchon.service.UserService;
 
 import io.jsonwebtoken.Jwt;
@@ -82,13 +83,13 @@ public class UserController {
     }
     
     
-    // 회원정보 수정하기
+    // 회원정보 수정하기 : 수정 21.08.16 // return Type DTO클래스로 맞추기
     @PutMapping(value = "/profile", consumes = {MediaType.APPLICATION_JSON_VALUE})
-    public String updateUserProfile(@RequestBody UserDTO userDTO, Principal principal) {
+    public String updateUserProfile(@RequestBody UserEntity userEntity, Principal principal) throws Exception {
     	String userId = principal.getName();
-    	userDTO.setUser_ID(userId);
+    	userEntity.setUserId(userId);
     	
-    	int isSuccess = userService.updateUserProfile(userDTO);
+    	int isSuccess = userService.updateUserProfile(userEntity);
     	
     	if (isSuccess > 0) { return "성공"; }
     	else {return "실패"; }
@@ -96,7 +97,7 @@ public class UserController {
     
     // 회원정보 수정시 비밀번호 확인하기
     @PostMapping(value="/profile/check", consumes = {MediaType.APPLICATION_JSON_VALUE})
-    public boolean checkPasswordForProfileUpdate(@RequestBody UserDTO userDTO, Principal principal ) {
+    public boolean checkPasswordForProfileUpdate(@RequestBody UserDTO userDTO, Principal principal ) throws Exception {
     	// 회원 아이디로 비밀번호 가져오기
     	String userId = principal.getName();
     	String encodedPassword =  userService.checkPasswordForProfileUpdate(userId);

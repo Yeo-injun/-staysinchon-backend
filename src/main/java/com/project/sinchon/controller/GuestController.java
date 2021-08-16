@@ -21,12 +21,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.JsonObject;
+import com.project.sinchon.dto.MyReservationDTO;
 import com.project.sinchon.dto.ReservationApplicationInfoDTO;
 import com.project.sinchon.dto.ReservationCancelDTO;
 import com.project.sinchon.dto.ReservationInfoDTO;
 import com.project.sinchon.dto.RoomDTO;
 import com.project.sinchon.dto.UserDTO;
-import com.project.sinchon.service.ApplyReservaionService;
 import com.project.sinchon.service.ReservationService;
 import com.project.sinchon.service.RoomService;
 import com.project.sinchon.service.UserService;
@@ -55,9 +55,6 @@ public class GuestController {
     
     @Autowired 
     private RoomService roomService;
-    
-    @Autowired
-    private ApplyReservaionService applyReservationService;
     
     @Autowired
     private ReservationService reservationService;
@@ -136,19 +133,12 @@ public class GuestController {
      * 2021.05.19 로그인 기능 구현 - Controller Method 매개변수로 Principal를 할당해서 .getName() 함수로 user_ID값 가져오기  
      */
     @GetMapping(value = "/reservations", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public List<ReservationInfoDTO> getMyReservations(Principal principal) throws Exception {
-    	// 로그인한 사용자의 Token에 있는 정보로 user_ID접근
-    	String user_ID = principal.getName(); 
-    	
-    	// map자료구조에 user_ID값을 담고
-    	// map을 인자로 넣어줘 Service 레이어 호출
-    	HashMap<String, String> map = new HashMap<String, String>();
-    	map.put("user_ID", user_ID);
-    	List<ReservationInfoDTO> myReservationList = reservationService.getMyReservationList(map);
-    	System.out.println(myReservationList.size());
-    	
-    	return myReservationList;
+    public List<MyReservationDTO> getMyReservations(Principal principal) throws Exception 
+    {
+    	String userId = principal.getName(); 
+    	return reservationService.getMyReservationList(userId);
     }
+    
     
     /**
      * @description [마이페이지] 예약수정하기 (수정할 예약정보 가져오기) 

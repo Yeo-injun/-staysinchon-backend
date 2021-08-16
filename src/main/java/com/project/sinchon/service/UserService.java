@@ -3,6 +3,7 @@ package com.project.sinchon.service;
 import java.util.Map;
 
 import com.project.sinchon.dto.UserDTO;
+import com.project.sinchon.entity.UserEntity;
 
 /*
 *
@@ -18,19 +19,22 @@ public interface UserService {
      */
 	public UserDTO getUserDetails(String userId) throws Exception;
 
+	
 	/**
      * @description 회원 인적사항 수정하기
      */
-	public int updateUserProfile(UserDTO userDTO);
+	public int updateUserProfile(UserEntity userEntity) throws Exception;
 
+	
 	/**
      * @description 회원 정보 수정시 비밀번호 확인
      */
-	public String checkPasswordForProfileUpdate(String userId);
+	public String checkPasswordForProfileUpdate(String userId) throws Exception;
 
+	
 	 /**
      * @description 회원 프로필 가져오기 : 예약할때 입력된 회원정보가 있을 경우 회원정보 return
      */
-	public UserDTO getUserProfileForReservation(String userId);
+	public UserDTO getUserProfileForReservation(String userId) throws Exception;
 
 }

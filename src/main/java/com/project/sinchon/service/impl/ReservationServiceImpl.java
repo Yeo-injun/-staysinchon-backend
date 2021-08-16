@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.project.sinchon.dao.ReservationDAO;
 import com.project.sinchon.dao.UserDAO;
+import com.project.sinchon.dto.MyReservationDTO;
 import com.project.sinchon.dto.ReservationApplicationInfoDTO;
 import com.project.sinchon.dto.ReservationCancelDTO;
 import com.project.sinchon.dto.ReservationInfoDTO;
@@ -59,8 +60,8 @@ public class ReservationServiceImpl implements ReservationService {
 	
 	// 사용자가 예약한 예약현황 및 상태 정보 가져오기 
 	@Override
-	public List<ReservationInfoDTO> getMyReservationList(HashMap<String, String> map) throws Exception {
-		return reservationDAO.getMyReservationList(map);
+	public List<MyReservationDTO> getMyReservationList(String userId) throws Exception {
+		return reservationDAO.getMyReservationList(userId);
 	}
 	
 	// 수정할 예약정보 가져오기

@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.project.sinchon.dao.UserDAO;
 import com.project.sinchon.dto.UserDTO;
+import com.project.sinchon.entity.UserEntity;
 import com.project.sinchon.service.UserService;
 
 /**
@@ -37,16 +38,14 @@ public class UserServiceImpl implements UserService {
      * @description 회원 인적사항 수정하기
      */
 	@Override
-	public int updateUserProfile(UserDTO userDTO) {
-		return userDAO.updateUserDetails(userDTO);
+	public int updateUserProfile(UserEntity userEntity) throws Exception {
+		return userDAO.updateUserProfile(userEntity);
 	}
 
 	/**
      * @description 회원 정보 수정시 비밀번호 확인
      */
-	public String checkPasswordForProfileUpdate(String userId) {
-		
-		
+	public String checkPasswordForProfileUpdate(String userId) throws Exception {
 		return userDAO.checkPasswordForProfileUpdate(userId);
 	}
 

@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.project.sinchon.dto.MyReservationDTO;
 import com.project.sinchon.dto.ReservationApplicationInfoDTO;
 import com.project.sinchon.dto.ReservationCancelDTO;
 import com.project.sinchon.dto.ReservationInfoDTO;
@@ -24,7 +25,7 @@ public interface ReservationService {
      * @return List<ReservationInfoVO
 	 * @description 사용자가 예약한 예약현황 및 상태 정보 가져오기 
      */
-	List<ReservationInfoDTO> getMyReservationList(HashMap<String, String> map) throws Exception;
+	List<MyReservationDTO> getMyReservationList(String userId) throws Exception;
 
 	 /**
      * @param 

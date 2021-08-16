@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.project.sinchon.config.security.auth.User;
-import com.project.sinchon.dto.ApplyReservationDTO;
 import com.project.sinchon.dto.UserDTO;
 import com.project.sinchon.entity.UserEntity;
 

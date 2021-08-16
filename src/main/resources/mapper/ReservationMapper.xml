@@ -2,35 +2,6 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.project.sinchon.mapper.reservation">
-	<!-- 예약정보 테이블에 사용자가 입력한 예약정보 저장 -->	
-	<insert id="insertInfo" parameterType="com.project.sinchon.dto.ApplyReservationDTO">
-		<!-- res_ID로 PK값 생성후 해당값을 INSERT구문에 넣어줌. -->
-		<selectKey resultType="int" keyProperty="res_ID" order="BEFORE">
-        	SELECT IFNULL(max(res_ID),0)+1 as res_ID
-			FROM reservation_info
-    	</selectKey>
-		INSERT INTO reservation_info(
-			res_ID, 
-			check_in, 
-			check_out, 
-			stay_purpose, 
-			num_of_guests, 
-			payment,
-			message,
-			user_ID, 
-			room_ID)
-		VALUES (
-			#{res_ID},
-			#{check_in}, 
-			#{check_out}, 
-			#{stay_purpose}, 
-			#{num_of_guests}, 
-			#{payment},
-			#{message}, 
-			#{user_ID}, 
-			#{room_ID})
-	</insert>
-	
 	<!-- 수정 완료 : 예약정보 테이블에 사용자가 입력한 예약정보 저장 -->	
 	<insert id="insertReservationInfo" parameterType="com.project.sinchon.entity.ReservationInfoEntity">
 	<!-- res_ID로 PK값 생성후 해당값을 INSERT구문에 넣어줌. -->
@@ -70,7 +41,7 @@
 	
 	<!-- 게스트의 예약 현황 및 상태 정보 가져오기 -->
 	<!-- room_name 값도 select해주기 : DTO클래스 수정요망 -->
-	<select id="getMyReservationList" resultType="com.project.sinchon.dto.ReservationInfoDTO">
+	<select id="getMyReservationList" resultType="com.project.sinchon.dto.MyReservationDTO">
 		SELECT	  Info.res_ID
 				, Info.res_date
 				, Info.check_in
@@ -83,7 +54,7 @@
 				, State.state 
 		FROM reservation_info Info INNER JOIN reservation_state State 
 			ON Info.res_ID = State.res_ID
-		WHERE Info.user_ID = #{user_ID}; 
+		WHERE Info.user_ID = #{userId}; 
 	</select>
 	
 	<!-- 수정할 예약 정보 가져오기 -->
