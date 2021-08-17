@@ -66,8 +66,10 @@
 	
 	<!-- 수정할 예약 정보 가져오기 -->
 	<select id="getReservationInfoForUpdate" parameterType="Map" resultType="com.project.sinchon.entity.ReservationInfoEntity">
-		SELECT 	stay_purpose
-			  , num_of_guests
+		SELECT 	res_ID AS resId
+			  , room_ID AS roomId
+			  ,	stay_purpose AS stayPurpose
+			  , num_of_guests AS numOfGuests
 			  , message
 		FROM reservation_info
 		WHERE res_ID = #{resId}

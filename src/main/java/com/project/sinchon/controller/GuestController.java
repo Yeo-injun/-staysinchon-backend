@@ -63,7 +63,7 @@ public class GuestController {
     @Autowired
     private UserService userService;
     
-    /**
+    /** 수정필요 >> DTO를 Entity로
      * @description [예약페이지] 모든 방 조회
      */
     @GetMapping(value = "/rooms", produces = {MediaType.APPLICATION_JSON_VALUE})
@@ -73,7 +73,7 @@ public class GuestController {
     }
     
     
-    /**
+    /** 수정필요 >> DTO를 Entity로
      * @description [예약페이지] 예약가능한 방 기본값 조회(기본값 : 현재일 기준 1박 2일 예약가능한 방)
      */
     @GetMapping(value = "/rooms/available", produces = {MediaType.APPLICATION_JSON_VALUE})
@@ -83,7 +83,7 @@ public class GuestController {
     }
     
     
-    /**
+    /** 수정필요 >> DTO를 Entity로
      * @description [예약페이지] 예약가능한 방 검색(파라미터 : check in 날짜, check out 날짜) 
      */
     @GetMapping(value = "/rooms/search", produces = {MediaType.APPLICATION_JSON_VALUE})
@@ -145,6 +145,7 @@ public class GuestController {
      * @description [마이페이지] 예약수정하기 (수정할 예약정보 가져오기) 
      * <추가 수정 요구사항> 21.04.22 인준 : 권한관리 (비회원에 대한 접근을 막고, 로그인한 user_ID 정보를 사용해야 함.) / 반환되는 JSON객체의 null값 제거하기!
      * 21.05.21 인준 : Service 레이어에서 받아온 Data를 user_ID로 검증해서 사용자 본인 예약정보만 호출할 수 있도록 작업 / JsonObject를 새로 생성해서 return(Front에서 필요한 데이터만 .addProperty() 함수로 넘겨줌) 
+     * ------------ 미사용 API
      */
     @GetMapping(value = "/reservation/{res_ID}", produces = {MediaType.APPLICATION_JSON_VALUE})
     public ReservationInfoEntity getReservationInfoForUpdate(@PathVariable("res_ID") int resId, Principal principal) throws Exception 
@@ -156,7 +157,8 @@ public class GuestController {
     	return reservationService.getReservationInfoForUpdate(map);
     }
     
-    /**
+    
+    /** 수정필요 
      * @description [마이페이지] 예약수정하기 (사용자가 입력한 예약정보로 수정하기) 
      * 21.05.23 인준 : 예약ID로 사용자ID조회해서 예약정보 수정요청을 보낸 사용자ID와 비교. 두 사용자ID가 동일하면 예약정보 Update 
      */
@@ -173,7 +175,7 @@ public class GuestController {
     	return reservationService.updateReservation(map);
     }
     
-    /** principal 추가 요망!!!###########################____________________________
+    /**  수정필요 
      * @description [마이페이지] 예약취소하기  
      * <추가 수정 요구사항>
      * 21.04.22 인준 : 권한관리 (비회원에 대한 접근을 막고, 로그인한 user_ID 정보를 사용해야 함.) / 수정데이터를 받을 객체 수정(수정항목만 받을 객체로 생성) / DAO호출 2개하는 것을 프로시저로 작성!
