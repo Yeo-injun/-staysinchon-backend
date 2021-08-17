@@ -47,9 +47,9 @@ public class ReservationDAO {
 
 	
 	// 수정할 예약 정보 가져오기
-	public ReservationInfoDTO getReservationForUpdate(Map map) {
-		return sqlSession.selectOne(namespace + ".getReservationForUpdate", map);
-	}
+	public ReservationInfoEntity getReservationInfoForUpdate(Map map) {
+		return sqlSession.selectOne(namespace + ".getReservationInfoForUpdate", map);
+	} /* 수정 21.08.17 */
 
 	// 입력한 예약정보 수정하기
 	public int updateReservation(Map map) {

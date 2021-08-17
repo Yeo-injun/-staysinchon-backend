@@ -20,5 +20,6 @@ public class MyReservationDTO {
     private int payment;
     private String userId;
     private int roomId;
+    private String roomName;
     private int state;     // 예약상태 테이블의 state속성값 받아주는 필드
 }

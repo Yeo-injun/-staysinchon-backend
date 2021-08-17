@@ -18,7 +18,9 @@
 			  , payment
 			  , message
 			  , user_ID 
-			  , room_ID )
+			  , room_ID
+			  , room_name
+			  )
 		VALUES (
 				#{resId}
 			  ,	#{checkIn}
@@ -28,8 +30,11 @@
 			  ,	#{payment}
 			  ,	#{message}
 			  ,	#{userId}
-			  ,	#{roomId} )
+			  ,	#{roomId}
+			  , #{roomName}
+			  )
 	</insert>
+	
 	
 	<!-- insertInfo를 통해 생성된 res_ID로 Procedure 호출 : 예약된 방 테이블, 예약상태 테이블 레코드 생성 -->
 	<insert id="insertRoomAndState" parameterType="Map">
@@ -39,30 +44,36 @@
 		}
 	</insert>
 	
+	
 	<!-- 게스트의 예약 현황 및 상태 정보 가져오기 -->
-	<!-- room_name 값도 select해주기 : DTO클래스 수정요망 -->
 	<select id="getMyReservationList" resultType="com.project.sinchon.dto.MyReservationDTO">
-		SELECT	  Info.res_ID
-				, Info.res_date
-				, Info.check_in
-				, Info.check_out
-				, Info.stay_purpose
-				, Info.num_of_guests
+		SELECT	  Info.res_ID AS resId
+				, Info.res_date AS resDate
+				, Info.check_in AS checkIn
+				, Info.check_out AS checkOut
+				, Info.stay_purpose  AS stayPurpose
+				, Info.num_of_guests AS numOfGuests
 				, Info.message
 				, Info.payment
-				, Info.room_ID
+				, Info.room_ID AS roomId
+				, Info.room_name AS roomName
 				, State.state 
 		FROM reservation_info Info INNER JOIN reservation_state State 
 			ON Info.res_ID = State.res_ID
 		WHERE Info.user_ID = #{userId}; 
 	</select>
 	
+	
 	<!-- 수정할 예약 정보 가져오기 -->
-	<select id="getReservationForUpdate" parameterType="Map" resultType="com.project.sinchon.dto.ReservationInfoDTO">
-		SELECT user_ID, stay_purpose, num_of_guests, message
+	<select id="getReservationInfoForUpdate" parameterType="Map" resultType="com.project.sinchon.entity.ReservationInfoEntity">
+		SELECT 	stay_purpose
+			  , num_of_guests
+			  , message
 		FROM reservation_info
-		WHERE res_ID = #{res_ID}; 
+		WHERE res_ID = #{resId}
+		  AND user_ID = #{userId} 
 	</select>
+	
 	
 	<!-- 예약ID로 reservationInfo에 있는 사용자ID 가져오기 -->
 	<select id="getReservationUserID" resultType="Map">

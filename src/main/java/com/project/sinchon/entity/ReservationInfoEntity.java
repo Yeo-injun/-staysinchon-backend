@@ -17,5 +17,6 @@ public class ReservationInfoEntity {
     private String message;
     private int payment;
     private String userId;
-    private int roomId;    
+    private int roomId; 
+    private String roomName;
 }

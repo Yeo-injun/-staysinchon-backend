@@ -8,12 +8,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.google.gson.JsonObject;
 import com.project.sinchon.dao.ReservationDAO;
 import com.project.sinchon.dao.UserDAO;
 import com.project.sinchon.dto.MyReservationDTO;
 import com.project.sinchon.dto.ReservationApplicationInfoDTO;
 import com.project.sinchon.dto.ReservationCancelDTO;
 import com.project.sinchon.dto.ReservationInfoDTO;
+import com.project.sinchon.entity.ReservationInfoEntity;
 import com.project.sinchon.service.ReservationService;
 
 import lombok.extern.slf4j.Slf4j;
@@ -36,6 +38,8 @@ public class ReservationServiceImpl implements ReservationService {
 	
 	@Autowired
 	private UserDAO userDAO;
+
+	private Exception Exception;
 	
 	// 사용자가 신청한 예약내용 저장하기
 	@Override
@@ -61,13 +65,14 @@ public class ReservationServiceImpl implements ReservationService {
 	// 사용자가 예약한 예약현황 및 상태 정보 가져오기 
 	@Override
 	public List<MyReservationDTO> getMyReservationList(String userId) throws Exception {
-		return reservationDAO.getMyReservationList(userId);
+		List<MyReservationDTO> result = reservationDAO.getMyReservationList(userId);
+		return result;
 	}
 	
 	// 수정할 예약정보 가져오기
 	@Override
-	public ReservationInfoDTO getReservationForUpdate(Map map) throws Exception {
-		return reservationDAO.getReservationForUpdate(map);
+	public ReservationInfoEntity getReservationInfoForUpdate(Map map) throws Exception {
+		return reservationDAO.getReservationInfoForUpdate(map);
 	}
 	
 	// 예약한 사용자인지 확인하고, 입력받은 예약정보로 수정하기

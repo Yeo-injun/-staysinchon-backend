@@ -27,6 +27,7 @@ import com.project.sinchon.dto.ReservationCancelDTO;
 import com.project.sinchon.dto.ReservationInfoDTO;
 import com.project.sinchon.dto.RoomDTO;
 import com.project.sinchon.dto.UserDTO;
+import com.project.sinchon.entity.ReservationInfoEntity;
 import com.project.sinchon.service.ReservationService;
 import com.project.sinchon.service.RoomService;
 import com.project.sinchon.service.UserService;
@@ -146,32 +147,13 @@ public class GuestController {
      * 21.05.21 인준 : Service 레이어에서 받아온 Data를 user_ID로 검증해서 사용자 본인 예약정보만 호출할 수 있도록 작업 / JsonObject를 새로 생성해서 return(Front에서 필요한 데이터만 .addProperty() 함수로 넘겨줌) 
      */
     @GetMapping(value = "/reservation/{res_ID}", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public JsonObject getReservationForUpdate(@PathVariable("res_ID") int res_ID, Principal principal) throws Exception {
-    	// 요청Header에서 Auth객체 받아와서 user_ID값 가져오기
-    	String user_ID = principal.getName();
-    	
-    	// Service 레이어로 넘길 Map객체 생성
+    public ReservationInfoEntity getReservationInfoForUpdate(@PathVariable("res_ID") int resId, Principal principal) throws Exception 
+    {
+    	String userId = principal.getName();
     	Map map = new HashMap<String, String>();
-    	map.put("user_ID", user_ID);
-    	map.put("res_ID", res_ID);
-    	
-    	// Service 레이어에서 Data 반환
-    	ReservationInfoDTO result = reservationService.getReservationForUpdate(map);
-    	JsonObject jsonObj = new JsonObject();
-
-		// Service 레이어에서 받은 reservation_info 데이터의 user_ID 검증 : 유효하지 않을 경우 데이터 반환X
-    	// String 자료형의 값의 일치 여부를 검증하기 위해 .equals() 함수를 이용 
-		if (!result.getUser_ID().equals(user_ID)) {
-			jsonObj.addProperty("error", "예약한 사용자가 아닙니다.");
-			return jsonObj;
-		}
-		
-		// res_ID값과 수정하고자 하는 값 json객체에 다시 담아주기
-		jsonObj.addProperty("res_ID", res_ID);
-		jsonObj.addProperty("stay_purpose", result.getStay_purpose());
-		jsonObj.addProperty("num_of_guests", result.getNum_of_guests());
-		jsonObj.addProperty("message", result.getMessage());
-		return jsonObj;
+    	map.put("userId", userId);
+    	map.put("resId", resId);
+    	return reservationService.getReservationInfoForUpdate(map);
     }
     
     /**

@@ -8,6 +8,7 @@ import com.project.sinchon.dto.MyReservationDTO;
 import com.project.sinchon.dto.ReservationApplicationInfoDTO;
 import com.project.sinchon.dto.ReservationCancelDTO;
 import com.project.sinchon.dto.ReservationInfoDTO;
+import com.project.sinchon.entity.ReservationInfoEntity;
 
 
 /*
@@ -29,10 +30,10 @@ public interface ReservationService {
 
 	 /**
      * @param 
-     * @return ReservationInfoVO
+     * @return ReservationInfoEntity
 	 * @description 수정할 예약정보 가져오기 
      */
-	ReservationInfoDTO getReservationForUpdate(Map map) throws Exception;
+	ReservationInfoEntity getReservationInfoForUpdate(Map map) throws Exception;
 
 	 /**
      * @param
