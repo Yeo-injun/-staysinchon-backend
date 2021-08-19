@@ -36,12 +36,12 @@ public interface ReservationService {
 	ReservationInfoEntity getReservationInfoForUpdate(Map map) throws Exception;
 
 	 /**
-     * @param
-	 * @return int
+     * @param ReservationInfoEntity
+	 * @return void
 	 * @throws Exception 
 	 * @description 예약한 사용자인지 확인하고, 입력받은 예약정보로 수정하기
      */
-	String updateReservation(Map map) throws Exception;
+	void updateReservation(ReservationInfoEntity reservationInfoEntity) throws Exception;
 
 	 /**
      * @param

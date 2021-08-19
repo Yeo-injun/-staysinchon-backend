@@ -77,21 +77,15 @@
 	</select>
 	
 	
-	<!-- 예약ID로 reservationInfo에 있는 사용자ID 가져오기 -->
-	<select id="getReservationUserID" resultType="Map">
-		SELECT user_ID
-		FROM reservation_info
-		WHERE res_ID = #{res_ID}
-	</select>
-	
 	<!-- 입력받은 데이터로 예약정보 수정하기 -->
-	<update id="updateReservation" parameterType="com.project.sinchon.dto.ReservationInfoDTO">
+	<update id="updateReservation" parameterType="com.project.sinchon.entity.ReservationInfoEntity">
 		UPDATE reservation_info
 		SET 
-			stay_purpose = #{stay_purpose}, 
-			num_of_guests = #{num_of_guests},
+			stay_purpose = #{stayPurpose}, 
+			num_of_guests = #{numOfGuests},
 			message = #{message}
-		WHERE res_ID = #{res_ID};
+		WHERE res_ID = #{resId}
+		  AND user_ID = #{userId}
 	</update>
 	
 	<!-- 취소된 예약 예약취소 테이블에 입력하기 -->

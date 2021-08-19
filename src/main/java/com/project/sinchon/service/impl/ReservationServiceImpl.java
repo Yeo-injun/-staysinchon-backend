@@ -69,25 +69,21 @@ public class ReservationServiceImpl implements ReservationService {
 		return result;
 	}
 	
+	
 	// 수정할 예약정보 가져오기
 	@Override
 	public ReservationInfoEntity getReservationInfoForUpdate(Map map) throws Exception {
 		return reservationDAO.getReservationInfoForUpdate(map);
 	}
 	
-	// 예약한 사용자인지 확인하고, 입력받은 예약정보로 수정하기
+	
+	// 사용자에게 입력받은 예약정보로 수정하기
 	@Override
-	public String updateReservation(Map map) throws Exception {
-		// 예약한 사용자인지 확인 : 예약한 사용자일 경우에만 update실행
-		Map ReservationUserID = reservationDAO.getReservationUserID((Integer) map.get("res_ID"));
-		if (ReservationUserID.get("user_ID").equals((String) map.get("user_ID"))) {
-			reservationDAO.updateReservation(map);
-			return "수정 완료입니다.";
-		}
-		return "수정할 수 있는 권한이 없습니다.";
+	public void updateReservation(ReservationInfoEntity reservationInfoEntity) throws Exception {
+		reservationDAO.updateReservation(reservationInfoEntity);
 	}
 
-	// 
+	// 리팩토링 예정 : 예약 취소 >> 예약정보 테이블에서 데이터 삭제 / 예약상태 변경 / 예약된 방 테이블 데이터 삭제
 	@Override
 	public Boolean cancelReservation(ReservationCancelDTO reservationCancelDTO) {
 		// 예약취소 테이블에 취소된 예약 입력하기

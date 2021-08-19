@@ -51,10 +51,11 @@ public class ReservationDAO {
 		return sqlSession.selectOne(namespace + ".getReservationInfoForUpdate", map);
 	} /* 수정 21.08.17 */
 
+	
 	// 입력한 예약정보 수정하기
-	public int updateReservation(Map map) {
-		return sqlSession.update(namespace + ".updateReservation", map);
-	}
+	public int updateReservation(ReservationInfoEntity reservationInfoEntity) {
+		return sqlSession.update(namespace + ".updateReservation", reservationInfoEntity);
+	} /* 수정 21.08.19 */
 	
 	// 예약취소 테이블에 취소된 예약ID 삽입하기
 	public int insertCancelReservation(ReservationCancelDTO reservationCancelDTO) {

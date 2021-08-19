@@ -141,11 +141,10 @@ public class GuestController {
     }
     
     
-    /**
+    /** ------------ 미사용 API
      * @description [마이페이지] 예약수정하기 (수정할 예약정보 가져오기) 
      * <추가 수정 요구사항> 21.04.22 인준 : 권한관리 (비회원에 대한 접근을 막고, 로그인한 user_ID 정보를 사용해야 함.) / 반환되는 JSON객체의 null값 제거하기!
      * 21.05.21 인준 : Service 레이어에서 받아온 Data를 user_ID로 검증해서 사용자 본인 예약정보만 호출할 수 있도록 작업 / JsonObject를 새로 생성해서 return(Front에서 필요한 데이터만 .addProperty() 함수로 넘겨줌) 
-     * ------------ 미사용 API
      */
     @GetMapping(value = "/reservation/{res_ID}", produces = {MediaType.APPLICATION_JSON_VALUE})
     public ReservationInfoEntity getReservationInfoForUpdate(@PathVariable("res_ID") int resId, Principal principal) throws Exception 
@@ -163,16 +162,11 @@ public class GuestController {
      * 21.05.23 인준 : 예약ID로 사용자ID조회해서 예약정보 수정요청을 보낸 사용자ID와 비교. 두 사용자ID가 동일하면 예약정보 Update 
      */
     @PutMapping(value = "/reservation", produces = {MediaType.APPLICATION_JSON_VALUE}, consumes = {MediaType.APPLICATION_JSON_VALUE})
-    public String updateReservation(@RequestBody ReservationInfoDTO reservationInfoDTO, Principal principal) throws Exception {
-    	// reservationInfoDTO 객체를 map형태로 변환하기 위한 ObjectMapper객체 선언
-    	ObjectMapper objectMapper = new ObjectMapper();
-    	Map map = objectMapper.convertValue(reservationInfoDTO, Map.class);
-    	
-    	// 사용자ID를 map객체에 추가로 삽입
-    	String user_ID = principal.getName();
-    	map.put("user_ID", user_ID);
-    	
-    	return reservationService.updateReservation(map);
+    public void updateReservation(@RequestBody ReservationInfoEntity reservationInfoEntity, Principal principal) throws Exception 
+    {
+    	String userId = principal.getName();
+    	reservationInfoEntity.setUserId(userId);
+    	reservationService.updateReservation(reservationInfoEntity);
     }
     
     /**  수정필요 
