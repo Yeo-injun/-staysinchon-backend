@@ -53,32 +53,26 @@ public class ReservationDAO {
 
 	
 	// 입력한 예약정보 수정하기
-	public int updateReservation(ReservationInfoEntity reservationInfoEntity) {
-		return sqlSession.update(namespace + ".updateReservation", reservationInfoEntity);
+	public int updateReservationInfo(ReservationInfoEntity reservationInfoEntity) {
+		return sqlSession.update(namespace + ".updateReservationInfo", reservationInfoEntity);
 	} /* 수정 21.08.19 */
 	
+	
 	// 예약취소 테이블에 취소된 예약ID 삽입하기
-	public int insertCancelReservation(ReservationCancelDTO reservationCancelDTO) {
-		return sqlSession.insert(namespace + ".insertCancelReservation", reservationCancelDTO);
-	}
+	public int insertReasonForCancelReservation(ReservationCancelDTO reservationCancelDTO) {
+		return sqlSession.insert(namespace + ".insertReasonForCancelReservation", reservationCancelDTO);
+	} /* 수정 21.08.20 */
+	
 	
 	// 취소된 예약의 예약상태 변경
-	public int updateStateToCancel(ReservationCancelDTO reservationCancelDTO) {
-		return sqlSession.update(namespace + ".updateStateToCancel", reservationCancelDTO);
-		
-	}
-	
-	// 예약ID로 예약한 사용자ID 가져오기
-	public Map getReservationUserID(Integer res_ID) {
-		return sqlSession.selectOne(namespace + ".getReservationUserID", res_ID);
-		
-	}
+	public int updateReservationStateToCancel(ReservationCancelDTO reservationCancelDTO) {
+		return sqlSession.update(namespace + ".updateReservationStateToCancel", reservationCancelDTO);
+	} /* 수정 21.08.20 */
 
+	
 	// 예약 취소된 res_ID로 예약된 방테이블 방정보 제거
 	public int deleteReservationRoom(ReservationCancelDTO reservationCancelDTO) {
 		return sqlSession.delete(namespace + ".deleteReservationRoom", reservationCancelDTO);
-	}
-
-
+	} /* 수정 21.08.20 */
 
 }

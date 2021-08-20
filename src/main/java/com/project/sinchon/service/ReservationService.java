@@ -41,14 +41,14 @@ public interface ReservationService {
 	 * @throws Exception 
 	 * @description 예약한 사용자인지 확인하고, 입력받은 예약정보로 수정하기
      */
-	void updateReservation(ReservationInfoEntity reservationInfoEntity) throws Exception;
+	void updateReservationInfo(ReservationInfoEntity reservationInfoEntity) throws Exception;
 
 	 /**
      * @param
 	 * @return int
 	 * @description 예약 취소하기 
      */
-	Boolean cancelReservation(ReservationCancelDTO reservationCancelDTO);
+	void cancelReservation(ReservationCancelDTO reservationCancelDTO) throws Exception;
 
 	 /**
      * @param ReservationApplicationInfoDTO

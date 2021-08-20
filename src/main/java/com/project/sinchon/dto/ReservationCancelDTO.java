@@ -2,12 +2,15 @@ package com.project.sinchon.dto;
 
 import java.util.Date;
 
-import lombok.Data;
 
-@Data
+import lombok.Getter;
+import lombok.Setter;
+
+/* 21.08.20 DTO유지 */
+@Getter
+@Setter
 public class ReservationCancelDTO {
-	private String user_ID;
-	private int res_ID;
+	private String userId;
+	private int resId;
 	private String content;
-	private Date cancel_date;
 }

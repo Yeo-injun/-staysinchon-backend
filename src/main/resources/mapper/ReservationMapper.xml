@@ -78,7 +78,7 @@
 	
 	
 	<!-- 입력받은 데이터로 예약정보 수정하기 -->
-	<update id="updateReservation" parameterType="com.project.sinchon.entity.ReservationInfoEntity">
+	<update id="updateReservationInfo" parameterType="com.project.sinchon.entity.ReservationInfoEntity">
 		UPDATE reservation_info
 		SET 
 			stay_purpose = #{stayPurpose}, 
@@ -88,26 +88,34 @@
 		  AND user_ID = #{userId}
 	</update>
 	
+	
 	<!-- 취소된 예약 예약취소 테이블에 입력하기 -->
-	<insert id="insertCancelReservation" parameterType="com.project.sinchon.dto.ReservationCancelDTO">
-		INSERT INTO 
-			reservation_cancel
-			(res_ID, content)
+	<insert id="insertReasonForCancelReservation" parameterType="com.project.sinchon.dto.ReservationCancelDTO">
+		INSERT INTO reservation_cancel
+			(
+			   res_ID
+			 , content
+			 )
 		VALUES 
-			(#{res_ID}, #{content});
+			(
+			   #{resId}
+			 , #{content}
+			 )
 	</insert>
 	
+	
 	<!-- 취소된 예약의 예약상태 변경 -->
-	<update id="updateStateToCancel" parameterType="com.project.sinchon.dto.ReservationCancelDTO">
-		UPDATE reservation_state
-		SET	state = 3
-		WHERE res_ID = #{res_ID}
-		  AND user_ID = #{user_ID};
+	<update id="updateReservationStateToCancel" parameterType="com.project.sinchon.dto.ReservationCancelDTO">
+		UPDATE 	reservation_state
+		SET		state = 3
+		WHERE 	res_ID = #{resId}
+		  AND 	user_ID = #{userId}
 	</update>
+	
 	
 	<!-- 취소된 res_ID로 예약된 방 테이블에서 예약일정 삭제 -->
 	<delete id="deleteReservationRoom" parameterType="com.project.sinchon.dto.ReservationCancelDTO">
 		DELETE FROM reservation_room
-		WHERE res_ID = #{res_ID}
+		WHERE res_ID = #{resId}
 	</delete>
 </mapper>

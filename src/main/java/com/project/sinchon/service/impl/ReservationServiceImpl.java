@@ -79,26 +79,22 @@ public class ReservationServiceImpl implements ReservationService {
 	
 	// 사용자에게 입력받은 예약정보로 수정하기
 	@Override
-	public void updateReservation(ReservationInfoEntity reservationInfoEntity) throws Exception {
-		reservationDAO.updateReservation(reservationInfoEntity);
+	public void updateReservationInfo(ReservationInfoEntity reservationInfoEntity) throws Exception {
+		reservationDAO.updateReservationInfo(reservationInfoEntity);
 	}
 
+	
 	// 리팩토링 예정 : 예약 취소 >> 예약정보 테이블에서 데이터 삭제 / 예약상태 변경 / 예약된 방 테이블 데이터 삭제
 	@Override
-	public Boolean cancelReservation(ReservationCancelDTO reservationCancelDTO) {
+	public void cancelReservation(ReservationCancelDTO reservationCancelDTO) throws Exception {
 		// 예약취소 테이블에 취소된 예약 입력하기
-		int isOkInsert = reservationDAO.insertCancelReservation(reservationCancelDTO);
+		reservationDAO.insertReasonForCancelReservation(reservationCancelDTO);
 		
 		// 예약상태 테이블 상태정보 변경 : 3 (예약취소상태)
-		int isOkUpdate = reservationDAO.updateStateToCancel(reservationCancelDTO);
+		reservationDAO.updateReservationStateToCancel(reservationCancelDTO);
 		
 		// 예약된 방 테이블에서 해당 res_ID 값 삭제하기
-		int isOkDelete = reservationDAO.deleteReservationRoom(reservationCancelDTO);
-		log.info("삭제할 res_ID : {}", reservationCancelDTO.getRes_ID());
-		log.info("삭제 DAO 정상작동? : {}", isOkDelete);
-		
-		if (isOkInsert == 1 && isOkUpdate == 1 && isOkDelete > 0) {return true;}
-		else {return false;}
+		reservationDAO.deleteReservationRoom(reservationCancelDTO);
 	}
 
 

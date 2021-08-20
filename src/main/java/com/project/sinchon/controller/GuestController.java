@@ -157,36 +157,30 @@ public class GuestController {
     }
     
     
-    /** 수정필요 
+    /** 
      * @description [마이페이지] 예약수정하기 (사용자가 입력한 예약정보로 수정하기) 
      * 21.05.23 인준 : 예약ID로 사용자ID조회해서 예약정보 수정요청을 보낸 사용자ID와 비교. 두 사용자ID가 동일하면 예약정보 Update 
      */
     @PutMapping(value = "/reservation", produces = {MediaType.APPLICATION_JSON_VALUE}, consumes = {MediaType.APPLICATION_JSON_VALUE})
-    public void updateReservation(@RequestBody ReservationInfoEntity reservationInfoEntity, Principal principal) throws Exception 
+    public void updateReservationInfo(@RequestBody ReservationInfoEntity reservationInfoEntity, Principal principal) throws Exception 
     {
     	String userId = principal.getName();
     	reservationInfoEntity.setUserId(userId);
-    	reservationService.updateReservation(reservationInfoEntity);
+    	reservationService.updateReservationInfo(reservationInfoEntity);
     }
     
-    /**  수정필요 
+    /** 
      * @description [마이페이지] 예약취소하기  
      * <추가 수정 요구사항>
      * 21.04.22 인준 : 권한관리 (비회원에 대한 접근을 막고, 로그인한 user_ID 정보를 사용해야 함.) / 수정데이터를 받을 객체 수정(수정항목만 받을 객체로 생성) / DAO호출 2개하는 것을 프로시저로 작성!
      * 21.08.02 인준 : principal을 통해 user_ID를 DTO에 담아서 Service Layer로 넘겨줌. 예약상태 테이블 변경할때 user_ID값도 조건으로 넣어서 SQL update실행
      */
     @PutMapping(value = "/reservation/cancel", produces = {MediaType.APPLICATION_JSON_VALUE}, consumes = {MediaType.APPLICATION_JSON_VALUE})
-    public String cancelReservation(@RequestBody ReservationCancelDTO reservationCancelDTO, Principal principal) throws Exception {
-    	// Principal에서 사용자 아이디 가지고 와서 DTO에 할당
-    	String user_ID = principal.getName();
-    	reservationCancelDTO.setUser_ID(user_ID);
-    	    	
-    	Boolean isSuccess = reservationService.cancelReservation(reservationCancelDTO);
-    	if (isSuccess) {
-        	return "성공!";
-    	} else {
-        	return "실패!";
-    	}
+    public void cancelReservation(@RequestBody ReservationCancelDTO reservationCancelDTO, Principal principal) throws Exception 
+    {
+    	String userId = principal.getName();
+    	reservationCancelDTO.setUserId(userId);
+    	reservationService.cancelReservation(reservationCancelDTO);
 
     }
 }// End
