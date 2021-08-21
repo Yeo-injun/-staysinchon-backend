@@ -28,14 +28,16 @@ public class UserDAO {
     private static final String namespace = "com.project.sinchon.mapper.user";
 
     // 아이디 중복 체크
-	public Map idCheck(User user) {
-		return sqlSession.selectOne(namespace + ".idCheck", user);
-	}
-    
+	public String checkDuplicationForId (String userEntity) {
+		 return sqlSession.selectOne(namespace + ".checkDuplicationForId", userEntity);
+	} // 21.08.21 수정
+
+	
     // 회원가입
-	public int registerUser(User user) {
-		return sqlSession.insert(namespace + ".registerUser", user);
-	}
+	public void insertUser(UserEntity userEntity) {
+		sqlSession.insert(namespace + ".insertUser", userEntity);
+	} // 21.08.21 수정
+	
 	
 	// 로그인 : 로그인 정보 비교를 위한 사용자 DB정보 가져오기
 	public User findByUserId(String user_ID) {

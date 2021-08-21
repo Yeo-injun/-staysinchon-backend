@@ -14,6 +14,19 @@ import com.project.sinchon.entity.UserEntity;
 * */
 
 public interface UserService {
+	
+    /**
+    * @description 아이디 중복확인
+    */
+	public void checkDuplicationForId(UserEntity userEntity) throws Exception;
+
+	
+    /**
+    * @description 회원가입하기
+    */
+	public void regiterUser(UserEntity userEntity) throws Exception;
+
+	
 	 /**
      * @description 회원 인적사항 가져오기
      */
@@ -36,5 +49,7 @@ public interface UserService {
      * @description 회원 프로필 가져오기 : 예약할때 입력된 회원정보가 있을 경우 회원정보 return
      */
 	public UserDTO getUserProfileForReservation(String userId) throws Exception;
+
+
 
 }

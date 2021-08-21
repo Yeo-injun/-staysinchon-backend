@@ -26,6 +26,28 @@ public class UserServiceImpl implements UserService {
 	@Autowired
 	private UserDAO userDAO;
 	
+	
+	/**
+    * @description 회원 아이디 중복확인
+    */
+	@Override
+	public void checkDuplicationForId(UserEntity userEntity) throws Exception {
+		String sqlResert = userDAO.checkDuplicationForId(userEntity.getUserId());
+		if (sqlResert != null || sqlResert.isBlank()) { // 기존에 아이디가 존재하면 Error를 던짐
+			throw new Exception();
+		}
+	}
+	
+	
+    /**
+    * @description 회원가입하기
+    */
+	@Override
+	public void regiterUser(UserEntity userEntity) throws Exception {		
+		userDAO.insertUser(userEntity);
+	}
+	
+	
 	 /**
      * @description 회원 인적사항 가져오기
      */
@@ -67,5 +89,9 @@ public class UserServiceImpl implements UserService {
 			return userDTO;
 		}
 	}
+
+
+
+
 
 }

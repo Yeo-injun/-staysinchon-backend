@@ -53,25 +53,22 @@ public class UserController {
     // 토큰 생성 및 검증용 객체 선언
     private final JwtTokenProvider jwtTokenProvider;
 
+    
     // 회원가입
     @PostMapping("/register")
-    public String register(@RequestBody User user) {
-    	// bcrypt 설정 추가 필요...
-    	user.setPwd(passwordEncoder.encode(user.getPwd()));
-    	int success = principalDetailsService.registerUser(user);
-    	if (success != 0) {
-    		return "회원가입 성공";
-    	}
-    	
-    	return "회원가입 실패...";
+    public void registerUser(@RequestBody UserEntity userEntity) throws Exception
+    {
+    	userEntity.setPwd(passwordEncoder.encode(userEntity.getPwd()));
+    	userService.regiterUser(userEntity);
     }
+    
     
     // 아이디 중복 체크
     @PostMapping("/check")
-    public String idCheck(@RequestBody User user) throws Exception {
-    	String isDuplicate = principalDetailsService.idCheck(user);
-    	return isDuplicate;
+    public void checkDuplicationForId(@RequestBody UserEntity userEntity) throws Exception {
+    	userService.checkDuplicationForId(userEntity);
     }
+    
     
     // 회원정보 보여주기 : 스프링 시큐리티에서 Auth체크를 진행하고, 통과하면 Principal객체를 반환함. 이 객체에 userID정보가 있어 이를 가져와서 회원정보를 가져오기
     @GetMapping(value = "/profile", produces = {MediaType.APPLICATION_JSON_VALUE})
@@ -83,17 +80,15 @@ public class UserController {
     }
     
     
-    // 회원정보 수정하기 : 수정 21.08.16 // return Type DTO클래스로 맞추기
+    // 회원정보 수정하기
     @PutMapping(value = "/profile", consumes = {MediaType.APPLICATION_JSON_VALUE})
-    public String updateUserProfile(@RequestBody UserEntity userEntity, Principal principal) throws Exception {
+    public void updateUserProfile(@RequestBody UserEntity userEntity, Principal principal) throws Exception 
+    {
     	String userId = principal.getName();
     	userEntity.setUserId(userId);
-    	
-    	int isSuccess = userService.updateUserProfile(userEntity);
-    	
-    	if (isSuccess > 0) { return "성공"; }
-    	else {return "실패"; }
-    }
+    	userService.updateUserProfile(userEntity);
+    } // 수정 21.08.16 
+    
     
     // 회원정보 수정시 비밀번호 확인하기
     @PostMapping(value="/profile/check", consumes = {MediaType.APPLICATION_JSON_VALUE})

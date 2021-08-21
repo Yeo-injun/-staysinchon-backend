@@ -45,7 +45,15 @@ import com.project.sinchon.service.UserService;
  * 2021.04.17 : 여인준 / 예약신청 폼화면으로 이동 요청 메소드 변경 (GET에서 POST로)
  * 2021.04.18 : 여인준 / 호스트가 등록한 모든 방 조회(예약하기 페이지에서 기본적으로 제공하는 데이터)
  * -------------------------------------------------------------------------
- * 리팩토링 ver.0.1 : 파라미터 타입 고정 : primitive type 또는 DTO객체. Map객체 절대 안됨.
+ * 리팩토링 ver.0.1 
+ *  1.파라미터 타입 고정 
+ *   - 단일 값일 경우 : primitive type 
+ *   - 다중 값일 경우 : DTO/Entity 객체 또는 Map객체(명명규칙 : paramsMap)
+ *   
+ * 	2. Return 타입 고정
+ *   - 없을 때 : void >> 실행 실패시 예외처리로 HTTP상태 코드 조작 [추가 작업 필요]
+ * 	 - 단일 값일 경우 : primitive type
+ *   - 다중 값일 경우 : DTO/Entity 객체 (Map객체 절대 안됨)
  * */
 
 @CrossOrigin(origins = "http://localhost:3000")
