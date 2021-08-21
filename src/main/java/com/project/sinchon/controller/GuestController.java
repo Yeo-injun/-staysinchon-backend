@@ -24,10 +24,9 @@ import com.google.gson.JsonObject;
 import com.project.sinchon.dto.MyReservationDTO;
 import com.project.sinchon.dto.ReservationApplicationInfoDTO;
 import com.project.sinchon.dto.ReservationCancelDTO;
-import com.project.sinchon.dto.ReservationInfoDTO;
-import com.project.sinchon.dto.RoomDTO;
 import com.project.sinchon.dto.UserDTO;
 import com.project.sinchon.entity.ReservationInfoEntity;
+import com.project.sinchon.entity.RoomEntity;
 import com.project.sinchon.service.ReservationService;
 import com.project.sinchon.service.RoomService;
 import com.project.sinchon.service.UserService;
@@ -63,31 +62,32 @@ public class GuestController {
     @Autowired
     private UserService userService;
     
-    /** 수정필요 >> DTO를 Entity로
+    
+    /** 
      * @description [예약페이지] 모든 방 조회
      */
     @GetMapping(value = "/rooms", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public List<RoomDTO> getRoomList() throws Exception 
+    public List<RoomEntity> getRoomList() throws Exception 
     {
         return roomService.getRoomList();
     }
     
     
-    /** 수정필요 >> DTO를 Entity로
+    /** 
      * @description [예약페이지] 예약가능한 방 기본값 조회(기본값 : 현재일 기준 1박 2일 예약가능한 방)
      */
     @GetMapping(value = "/rooms/available", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public List<RoomDTO> getReservableRoomListDefaultSearch(Authentication auth) throws Exception 
+    public List<RoomEntity> getReservableRoomListDefaultSearch(Authentication auth) throws Exception 
     {
         return roomService.getReservableRoomListDefaultSearch();
     }
     
     
-    /** 수정필요 >> DTO를 Entity로
+    /** 
      * @description [예약페이지] 예약가능한 방 검색(파라미터 : check in 날짜, check out 날짜) 
      */
     @GetMapping(value = "/rooms/search", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public List<RoomDTO> getSearchReservableRoomList(@RequestParam("check_in") String checkIn,
+    public List<RoomEntity> getSearchReservableRoomList(@RequestParam("check_in") String checkIn,
     												 @RequestParam("check_out") String checkOut) throws Exception 
     {	
     	Map<String, Date> paramsMap = new HashMap<String, Date>();
@@ -169,6 +169,7 @@ public class GuestController {
     	reservationService.updateReservationInfo(reservationInfoEntity);
     }
     
+    
     /** 
      * @description [마이페이지] 예약취소하기  
      * <추가 수정 요구사항>
@@ -181,6 +182,5 @@ public class GuestController {
     	String userId = principal.getName();
     	reservationCancelDTO.setUserId(userId);
     	reservationService.cancelReservation(reservationCancelDTO);
-
     }
 }// End

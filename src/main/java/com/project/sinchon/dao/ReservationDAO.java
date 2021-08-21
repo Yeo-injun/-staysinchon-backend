@@ -10,7 +10,6 @@ import org.springframework.stereotype.Repository;
 
 import com.project.sinchon.dto.MyReservationDTO;
 import com.project.sinchon.dto.ReservationCancelDTO;
-import com.project.sinchon.dto.ReservationInfoDTO;
 import com.project.sinchon.entity.ReservationInfoEntity;
 
 /*

@@ -3,30 +3,30 @@
 
 <mapper namespace="com.project.sinchon.mapper.RoomMapper">
 	<!-- 호스트가 등록한 모든 방 조회 -->
-	<select id="getRoomList" resultType="com.project.sinchon.dto.RoomDTO">
-		SELECT room_ID
-			 , room_name
-			 , room_type
-			 , room_img
+	<select id="getRoomList" resultType="com.project.sinchon.entity.RoomEntity">
+		SELECT room_ID		AS roomId
+			 , room_name	AS roomName
+			 , room_type	AS roomType
+			 , room_img		AS roomImg
 			 , bed
 			 , bathroom
 			 , capacity
-			 , price_day
-			 , price_month
+			 , price_day	AS priceDay
+			 , price_month	AS priceMonth
 		FROM room
 	</select>
 
 	<!-- 예약가능한 방 출력하기 : 기본값 시스템 시간 기준 1박2일 -->
-	<select id="getReservableRoomListDefaultSearch" resultType="com.project.sinchon.dto.RoomDTO">
-		SELECT room_ID
-			 , room_name
-			 , room_type
-			 , room_img
+	<select id="getReservableRoomListDefaultSearch" resultType="com.project.sinchon.entity.RoomEntity">
+		SELECT room_ID		AS roomId
+			 , room_name	AS roomName
+			 , room_type	AS roomType
+			 , room_img		AS roomImg
 			 , bed
 			 , bathroom
 			 , capacity
-			 , price_day
-			 , price_month
+			 , price_day	AS priceDay
+			 , price_month	AS priceMonth
 		FROM room
 		WHERE room_ID NOT IN
   			(SELECT DISTINCT room_ID
@@ -35,16 +35,16 @@
 	</select>
 	
 	<!-- 예약가능한 방 출력하기 : 사용자 입력값에 따라 출력 -->
-	<select id="getSearchReservableRoomList" resultType="com.project.sinchon.dto.RoomDTO">
-		SELECT room_ID
-			 , room_name
-			 , room_type
-			 , room_img
+	<select id="getSearchReservableRoomList" resultType="com.project.sinchon.entity.RoomEntity">
+		SELECT room_ID		AS roomId
+			 , room_name	AS roomName
+			 , room_type	AS roomType
+			 , room_img		AS roomImg
 			 , bed
 			 , bathroom
 			 , capacity
-			 , price_day
-			 , price_month
+			 , price_day	AS priceDay
+			 , price_month	AS priceMonth
 		FROM room
 		WHERE room_ID NOT IN
   			(SELECT DISTINCT room_ID

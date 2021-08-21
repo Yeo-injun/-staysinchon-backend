@@ -1,4 +1,4 @@
-package com.project.sinchon.dto;
+package com.project.sinchon.common.dto;
 
 import lombok.Getter;
 import lombok.Setter;

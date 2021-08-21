@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.project.sinchon.dto.RoomDTO;
+import com.project.sinchon.entity.RoomEntity;
 
 /*
 *
@@ -23,19 +23,19 @@ public interface RoomService {
 	 /**
      * @description 호스트가 등록한 모든 방 조회
      */
-	List<RoomDTO> getRoomList() throws Exception;
+	List<RoomEntity> getRoomList() throws Exception;
 	 
 	
 	/**
      * @description 예약가능한 방 리스트 출력 (기본값 : 접속일 기준 1박2일로 예약가능한 방 조회)
      */
-	List<RoomDTO> getReservableRoomListDefaultSearch() throws Exception;
+	List<RoomEntity> getReservableRoomListDefaultSearch() throws Exception;
 
 	
 	 /**
      * @param paramsMap 
 	 * @description 예약가능한 방 리스트 출력 (사용자 입력값에 따라 출력)
      */	
-	List<RoomDTO> getSearchReservableRoomList(Map<String, Date> paramsMap) throws Exception;
+	List<RoomEntity> getSearchReservableRoomList(Map<String, Date> paramsMap) throws Exception;
 
 }

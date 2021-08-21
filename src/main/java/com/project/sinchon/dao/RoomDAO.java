@@ -9,7 +9,7 @@ import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import com.project.sinchon.dto.*;
+import com.project.sinchon.entity.RoomEntity;
 
 /*
 *
@@ -31,21 +31,21 @@ public class RoomDAO {
 	 /**
      * @description 호스트가 등록한 모든 방 조회
      */
-	public List<RoomDTO> getRoomList() {
+	public List<RoomEntity> getRoomList() {
 		return sqlSession.selectList(namespace + ".getRoomList");
 	}
     
 	 /**
      * @description 예약가능한 방 리스트 출력(기본값 : 접속일 기준 1박2일로 예약가능한 방 조회)
      */
-	public List<RoomDTO> getReservableRoomListDefaultSearch() {
+	public List<RoomEntity> getReservableRoomListDefaultSearch() {
         return sqlSession.selectList(namespace + ".getReservableRoomListDefaultSearch");
 	}
 
 	 /**
      * @description 예약가능한 방 리스트 출력 (사용자 입력값에 따라 출력)
      */	
-	public List<RoomDTO> getSearchReservableRoomList(Map<String, Date> paramsMap) {
+	public List<RoomEntity> getSearchReservableRoomList(Map<String, Date> paramsMap) {
 		return sqlSession.selectList(namespace + ".getSearchReservableRoomList", paramsMap);
 	}
 
