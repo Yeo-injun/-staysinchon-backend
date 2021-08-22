@@ -33,7 +33,7 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public void checkDuplicationForId(UserEntity userEntity) throws Exception {
 		String sqlResert = userDAO.checkDuplicationForId(userEntity.getUserId());
-		if (sqlResert != null || sqlResert.isBlank()) { // 기존에 아이디가 존재하면 Error를 던짐
+		if (sqlResert != null) { // 기존에 아이디가 존재하면 Error를 던짐
 			throw new Exception();
 		}
 	}
