@@ -64,7 +64,7 @@
 	</select>
 	
 	
-	<select id="checkPasswordForProfileUpdate" resultType="String">
+	<select id="checkPasswordForProfileUpdate" parameterType="String" resultType="String">
 		SELECT pwd
 		FROM user
 		WHERE user_ID = #{userId}

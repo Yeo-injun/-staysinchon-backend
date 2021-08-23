@@ -42,7 +42,9 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
 
 	// 인증 및 권한이 필요한 URL 접근히 해당 메소드 동작
 	@Override
-	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
+	protected void doFilterInternal(HttpServletRequest request
+								  , HttpServletResponse response
+								  , FilterChain chain)
 			throws IOException, ServletException {
 		System.out.println("인증 및 권한이 필요한 URL요청이 들어옴");
 		
