@@ -60,24 +60,23 @@ public class UserController {
     {
     	userEntity.setPwd(passwordEncoder.encode(userEntity.getPwd()));
     	userService.regiterUser(userEntity);
-    }
+    } // 수정 21.08.21
     
     
     // 아이디 중복 체크
     @PostMapping("/check")
     public void checkDuplicationForId(@RequestBody UserEntity userEntity) throws Exception {
     	userService.checkDuplicationForId(userEntity);
-    }
+    } // 수정 21.08.22
     
     
     // 회원정보 보여주기 : 스프링 시큐리티에서 Auth체크를 진행하고, 통과하면 Principal객체를 반환함. 이 객체에 userID정보가 있어 이를 가져와서 회원정보를 가져오기
     @GetMapping(value = "/profile", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public UserDTO getUserProfile(Principal principal) throws Exception 
+    public UserEntity getUserProfile(Principal principal) throws Exception 
     {
     	String userId = principal.getName();	
-    	UserDTO result = userService.getUserDetails(userId);
-    	return result;
-    }
+    	return userService.getUserProfile(userId);
+    } // 수정 21.08.23
     
     
     // 회원정보 수정하기

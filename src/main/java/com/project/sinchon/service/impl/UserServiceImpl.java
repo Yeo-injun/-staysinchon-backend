@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.project.sinchon.dao.UserDAO;
 import com.project.sinchon.dto.UserDTO;
+import com.project.sinchon.dto.UserProfileDTO;
 import com.project.sinchon.entity.UserEntity;
 import com.project.sinchon.service.UserService;
 
@@ -52,8 +53,8 @@ public class UserServiceImpl implements UserService {
      * @description 회원 인적사항 가져오기
      */
 	@Override
-	public UserDTO getUserDetails(String userId) throws Exception {		
-		return userDAO.getUserDetails(userId);
+	public UserEntity getUserProfile(String userId) throws Exception {		
+		return userDAO.getUserProfile(userId);
 	}
 
 	/**
@@ -64,6 +65,7 @@ public class UserServiceImpl implements UserService {
 		return userDAO.updateUserProfile(userEntity);
 	}
 
+	
 	/**
      * @description 회원 정보 수정시 비밀번호 확인
      */
@@ -76,22 +78,19 @@ public class UserServiceImpl implements UserService {
      * @description 회원 프로필 가져오기 : 예약할때 입력된 회원정보가 있을 경우 회원정보 return
      */
 	@Override
-	public UserDTO getUserProfileForReservation(String userId) {
-		UserDTO sqlResult = userDAO.getUserDetails(userId);
+	public UserProfileDTO getUserProfileForReservation(String userId) {
+		// return으로 넘겨줄 DTO객체 생성
+		UserProfileDTO result = new UserProfileDTO();
+		UserEntity userEntity = userDAO.getUserProfile(userId);
 		
 		// reg_date와 update_date가 다른지 확인 : reg_date - update_date 값이 다르면 사용자 인적사항 return해주기
-		if (!sqlResult.getReg_date().equals(sqlResult.getUpdate_date())) {
-			sqlResult.setUserInfo(true);			
-			return sqlResult;			
+		if (!userEntity.getRegDate().equals(userEntity.getUpdateDate())) {
+			result.setUserInfoYn(true);
+			result.setUserEntity(userEntity);
+			return result;			
 		} else {
-			UserDTO userDTO = new UserDTO();
-			userDTO.setUserInfo(false);
-			return userDTO;
+			result.setUserInfoYn(false);
+			return result;
 		}
-	}
-
-
-
-
-
-}
+	} // 21.08.23 수정
+} // End

@@ -27,6 +27,7 @@ public class UserDAO {
     private SqlSession sqlSession;
     private static final String namespace = "com.project.sinchon.mapper.user";
 
+    
     // 아이디 중복 체크
 	public String checkDuplicationForId (String userEntity) {
 		 return sqlSession.selectOne(namespace + ".checkDuplicationForId", userEntity);
@@ -44,6 +45,11 @@ public class UserDAO {
 		return sqlSession.selectOne(namespace + ".findByUserId", user_ID);
 	}
 
+
+	// 사용자 인적사항 가져오기
+	public UserEntity getUserProfile(String userId) {
+		return sqlSession.selectOne(namespace + ".getUserProfile", userId);
+	} // 21.08.23 수정
 	
 	
 	/* 예약신청시 입력하는 사용자 정보 저장 @@@@@ 21.08.16 대체된 코드 @@@@@ */
@@ -58,19 +64,8 @@ public class UserDAO {
 	}
 	
 	
-	
-	
-	// 사용자 인적사항 가져오기
-	public UserDTO getUserDetails(String userId) {
-		return sqlSession.selectOne(namespace + ".getUserDetails", userId);
-	}
-
 	public String checkPasswordForProfileUpdate(String userId) {
 		return sqlSession.selectOne(namespace + ".checkPasswordForProfileUpdate", userId);
 	}
 
-
-
-
-
-}
+} // End

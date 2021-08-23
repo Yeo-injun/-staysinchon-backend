@@ -25,6 +25,7 @@ import com.project.sinchon.dto.MyReservationDTO;
 import com.project.sinchon.dto.ReservationApplicationInfoDTO;
 import com.project.sinchon.dto.ReservationCancelDTO;
 import com.project.sinchon.dto.UserDTO;
+import com.project.sinchon.dto.UserProfileDTO;
 import com.project.sinchon.entity.ReservationInfoEntity;
 import com.project.sinchon.entity.RoomEntity;
 import com.project.sinchon.service.ReservationService;
@@ -111,7 +112,7 @@ public class GuestController {
      *  21.07.20 인준 : Post메소드에서 Get메소드로 전환(React에서 화면전환시 Link 태그에 데이터를 넘겨주고, 전환된 화면에서 {location}를 파라미터로 받아서 사용 가능해서) 
      */
     @GetMapping(value = "/reservation/form", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public UserDTO getUserProfileForReservation(Principal principal) throws Exception
+    public UserProfileDTO getUserProfileForReservation(Principal principal) throws Exception
     {
     	// 인증된 사용자의 user데이터 가져오기  
     	String userId = principal.getName();

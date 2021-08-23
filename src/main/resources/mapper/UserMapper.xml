@@ -13,11 +13,12 @@
 
 	<!-- 회원가입 : 사용자 정보 Insert -->
 	<insert id="insertUser" parameterType="com.project.sinchon.entity.UserEntity">
-		INSERT INTO user(
-						   user_ID
-						 , email
-						 , pwd
-						)
+		INSERT INTO user
+			   (
+			     user_ID
+			   , email
+			   , pwd
+			   )
 		VALUES (
 				  #{userId}
 				, #{email}
@@ -33,6 +34,7 @@
 		WHERE user_ID = #{user_ID}
 	</select>
 
+
 	<!-- MyPage에서 회원정보 수정 -->
 	<update id="updateUserProfile" parameterType="com.project.sinchon.entity.UserEntity">
 		UPDATE user
@@ -47,19 +49,20 @@
 	</update>
 	
 	
-	
-	<select id="getUserDetails" parameterType="String" resultType="com.project.sinchon.dto.UserDTO">
+	<!-- 회원 프로필 Select -->
+	<select id="getUserProfile" parameterType="String" resultType="com.project.sinchon.entity.UserEntity">
 		SELECT 	firstname
 			  , lastname
 			  , sex
 			  , country
-			  , age_group
-			  , NA_foods
-			  , reg_date
-			  , update_date
+			  , age_group	AS ageGroup
+			  , NA_foods	AS NaFoods
+			  , reg_date	AS regDate
+			  , update_date	AS updateDate
 		FROM user
 		WHERE user_ID = #{userId}
 	</select>
+	
 	
 	<select id="checkPasswordForProfileUpdate" resultType="String">
 		SELECT pwd
